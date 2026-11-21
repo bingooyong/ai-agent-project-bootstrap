@@ -1,0 +1,214 @@
+{
+  "status": "PASS",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "scope": "offline core integration; cross-builds are not native runtime acceptance",
+  "source_stable": true,
+  "results": [
+    {
+      "name": "format",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/format.json"
+    },
+    {
+      "name": "module-verify",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/module-verify.json"
+    },
+    {
+      "name": "vet",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/vet.json"
+    },
+    {
+      "name": "race",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/race.json"
+    },
+    {
+      "name": "go125-version",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/go125-version.json"
+    },
+    {
+      "name": "go125-race",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/go125-race.json"
+    },
+    {
+      "name": "schema-freshness",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/schema-freshness.json"
+    },
+    {
+      "name": "task-and-docs",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/task-and-docs.json"
+    },
+    {
+      "name": "whitespace",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/whitespace.json"
+    },
+    {
+      "name": "build-native",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/build-native.json"
+    },
+    {
+      "name": "scan-static",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/scan-static.json"
+    },
+    {
+      "name": "init-dry-run",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/init-dry-run.json"
+    },
+    {
+      "name": "init-plan",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/init-plan.json"
+    },
+    {
+      "name": "init-apply",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/init-apply.json"
+    },
+    {
+      "name": "check-static",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/check-static.json"
+    },
+    {
+      "name": "init-idempotent",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/init-idempotent.json"
+    },
+    {
+      "name": "profile-stored",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/profile-stored.json"
+    },
+    {
+      "name": "check-save-report",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/check-save-report.json"
+    },
+    {
+      "name": "check-refuse-report-overwrite",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/check-refuse-report-overwrite.json"
+    },
+    {
+      "name": "dry-run-refuse-report",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/dry-run-refuse-report.json"
+    },
+    {
+      "name": "selected-config-plan",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/selected-config-plan.json"
+    },
+    {
+      "name": "selected-config-stale",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/selected-config-stale.json"
+    },
+    {
+      "name": "selected-config-apply",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/selected-config-apply.json"
+    },
+    {
+      "name": "selected-config-check",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/selected-config-check.json"
+    },
+    {
+      "name": "check-broken-reference",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/check-broken-reference.json"
+    },
+    {
+      "name": "check-protect-manual",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/check-protect-manual.json"
+    },
+    {
+      "name": "init-protect-manual",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/init-protect-manual.json"
+    },
+    {
+      "name": "recover-orphan-preview",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/recover-orphan-preview.json"
+    },
+    {
+      "name": "recover-orphan-refuse-wrong-digest",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/recover-orphan-refuse-wrong-digest.json"
+    },
+    {
+      "name": "recover-orphan-refuse-ci",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/recover-orphan-refuse-ci.json"
+    },
+    {
+      "name": "recover-orphan-apply",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/recover-orphan-apply.json"
+    },
+    {
+      "name": "scan-node-manager-source",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/scan-node-manager-source.json"
+    },
+    {
+      "name": "js-plan",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/js-plan.json"
+    },
+    {
+      "name": "js-apply",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/js-apply.json"
+    },
+    {
+      "name": "check-command-source-removed",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/check-command-source-removed.json"
+    },
+    {
+      "name": "cross-build-darwin-amd64",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/cross-build-darwin-amd64.json"
+    },
+    {
+      "name": "cross-build-linux-amd64",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/cross-build-linux-amd64.json"
+    },
+    {
+      "name": "cross-build-linux-arm64",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/cross-build-linux-arm64.json"
+    },
+    {
+      "name": "cross-build-windows-amd64",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/cross-build-windows-amd64.json"
+    },
+    {
+      "name": "cross-build-windows-arm64",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-provenance-recovery-01/cross-build-windows-arm64.json"
+    }
+  ],
+  "remaining": [
+    "Windows strict project I/O",
+    "native Linux execution",
+    "native Agent instruction loading",
+    "later roadmap phases"
+  ]
+}

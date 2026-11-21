@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Generated from Go types. This schema describes shape only; OMBP also enforces business, source, ownership and safety invariants.",
+  "properties": {
+    "adapter_fingerprint": {
+      "type": "string"
+    },
+    "adapter_version": {
+      "type": "string"
+    },
+    "config_fingerprint": {
+      "type": "string"
+    },
+    "config_path": {
+      "type": "string"
+    },
+    "outputs": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "block_sha256": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sha256",
+          "block_sha256"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "overrides": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "after": {
+            "additionalProperties": false,
+            "properties": {
+              "sha256": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "version",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "before": {
+            "additionalProperties": false,
+            "properties": {
+              "sha256": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "version",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "path": {
+            "type": "string"
+          },
+          "rule_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "rule_id",
+          "before",
+          "after",
+          "path"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "profile_fingerprint": {
+      "type": "string"
+    },
+    "profile_sha256": {
+      "type": "string"
+    },
+    "resolution_fingerprint": {
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "type": "string"
+    },
+    "template_fingerprint": {
+      "type": "string"
+    },
+    "template_version": {
+      "type": "string"
+    },
+    "tool_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "tool_version",
+    "adapter_version",
+    "template_version",
+    "config_fingerprint",
+    "adapter_fingerprint",
+    "template_fingerprint",
+    "profile_fingerprint",
+    "profile_sha256",
+    "resolution_fingerprint",
+    "rules",
+    "outputs"
+  ],
+  "title": "OMBP project-lock data shape",
+  "type": "object"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "cross-build-darwin-amd64",
+  "command": [
+    "go",
+    "build",
+    "-trimpath",
+    "-o",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-bv0cz83n/darwin-amd64",
+    "./cmd/ombp"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:38:36.757780+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "status": "PASS"
+}

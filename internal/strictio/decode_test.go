@@ -27,3 +27,19 @@ func TestDecodeRejectsUnsafeDocuments(t *testing.T) {
 		}
 	}
 }
+
+func TestDecodeRequiresNonOptionalFields(t *testing.T) {
+	type value struct {
+		Name       string   `json:"name" yaml:"name"`
+		Items      []string `json:"items,omitempty" yaml:"items,omitempty"`
+		DejaVuNote string   `json:"note" yaml:"note" schema:"optional"`
+	}
+	var missing value
+	if err := Decode([]byte(`{"items":[]}`), &missing); err == nil {
+		t.Fatal("accepted document with a missing required field")
+	}
+	var complete value
+	if err := Decode([]byte(`{"name":"ok"}`), &complete); err != nil || complete.Name != "ok" {
+		t.Fatalf("omitted optional fields were rejected: %v %#v", err, complete)
+	}
+}

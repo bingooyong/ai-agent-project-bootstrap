@@ -1,0 +1,20 @@
+{
+  "name": "js-apply",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-ebi4yh3w/ombp",
+    "init",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-ebi4yh3w/javascript",
+    "--apply",
+    "--plan",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-ebi4yh3w/js-plan.json",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:09:45.289741+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp init\",\n  \"mode\": \"local-write\",\n  \"operation_status\": \"complete\",\n  \"result\": \"clean\",\n  \"exit_code\": 0,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"data\": {\n    \"applied\": true,\n    \"changed_files\": 4,\n    \"plan_fingerprint\": \"a70bd03a11b81953686ce2aeaa9c602bb2c44b1a61429858f6e4866727e30a64\"\n  },\n  \"findings\": []\n}\n",
+  "stderr": "",
+  "status": "PASS"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "scan-node-manager-source",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-aayge6q7/ombp",
+    "scan",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-aayge6q7/javascript",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:18:22.525456+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp scan\",\n  \"mode\": \"static\",\n  \"operation_status\": \"complete\",\n  \"result\": \"clean\",\n  \"exit_code\": 0,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"coverage\": {\n    \"status\": \"complete\",\n    \"files_visited\": 1,\n    \"bytes_read\": 77,\n    \"excluded\": []\n  },\n  \"data\": {\n    \"schema_version\": \"1.0\",\n    \"facts\": [\n      {\n        \"kind\": \"build_tool\",\n        \"name\": \"pnpm\",\n        \"confidence\": 1,\n        \"status\": \"declared\",\n        \"evidence\": [\n          {\n            \"path\": \"package.json\",\n            \"pointer\": \"/packageManager\",\n            \"sha256\": \"7186a1c593c022b2ac2063e4925852eecb066ec179a8ee9cdb21dd614a46b7cb\"\n          }\n        ]\n      },\n      {\n        \"kind\": \"language\",\n        \"name\": \"javascript\",\n        \"confidence\": 1,\n        \"status\": \"declared\",\n        \"evidence\": [\n          {\n            \"path\": \"package.json\",\n            \"pointer\": \"/\",\n            \"sha256\": \"7186a1c593c022b2ac2063e4925852eecb066ec179a8ee9cdb21dd614a46b7cb\"\n          }\n        ]\n      }\n    ],\n    \"commands\": [\n      {\n        \"name\": \"test\",\n        \"argv\": [\n          \"pnpm\",\n          \"run\",\n          \"test\"\n        ],\n        \"cwd\": \".\",\n        \"status\": \"declared\",\n        \"execution_status\": \"NOT_RUN\",\n        \"evidence\": [\n          {\n            \"path\": \"package.json\",\n            \"pointer\": \"/scripts/test\",\n            \"sha256\": \"7186a1c593c022b2ac2063e4925852eecb066ec179a8ee9cdb21dd614a46b7cb\"\n          },\n          {\n            \"path\": \"package.json\",\n            \"pointer\": \"/packageManager\",\n            \"sha256\": \"7186a1c593c022b2ac2063e4925852eecb066ec179a8ee9cdb21dd614a46b7cb\"\n          }\n        ]\n      }\n    ],\n    \"modules\": [\n      {\n        \"path\": \".\",\n        \"manifest\": \"package.json\",\n        \"languages\": [\n          \"javascript\"\n        ]\n      }\n    ],\n    \"agent_configs\": [],\n    \"unknown_items\": [],\n    \"inputs\": {\n      \"package.json\": \"7186a1c593c022b2ac2063e4925852eecb066ec179a8ee9cdb21dd614a46b7cb\"\n    },\n    \"coverage\": {\n      \"status\": \"complete\",\n      \"files_visited\": 1,\n      \"bytes_read\": 77,\n      \"excluded\": []\n    }\n  },\n  \"findings\": []\n}\n",
+  "stderr": "",
+  "status": "PASS"
+}

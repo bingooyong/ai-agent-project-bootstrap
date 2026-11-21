@@ -1,0 +1,92 @@
+{
+  "status": "PASS",
+  "host": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "image_id": "sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a",
+  "scope": "Linux arm64 runtime in isolated Docker guest, CGO and race instrumentation disabled",
+  "results": [
+    {
+      "name": "docker-context",
+      "status": "PASS",
+      "log": "docker-context.json"
+    },
+    {
+      "name": "docker-endpoint",
+      "status": "PASS",
+      "log": "docker-endpoint.json"
+    },
+    {
+      "name": "docker-server",
+      "status": "PASS",
+      "log": "docker-server.json"
+    },
+    {
+      "name": "image",
+      "status": "PASS",
+      "log": "image.json"
+    },
+    {
+      "name": "go-version",
+      "status": "PASS",
+      "log": "go-version.json"
+    },
+    {
+      "name": "build-cli",
+      "status": "PASS",
+      "log": "build-cli.json"
+    },
+    {
+      "name": "build-safeio",
+      "status": "PASS",
+      "log": "build-safeio.json"
+    },
+    {
+      "name": "build-updater",
+      "status": "PASS",
+      "log": "build-updater.json"
+    },
+    {
+      "name": "build-governance",
+      "status": "PASS",
+      "log": "build-governance.json"
+    },
+    {
+      "name": "build-cli",
+      "status": "PASS",
+      "log": "build-cli.json"
+    },
+    {
+      "name": "cli-linux-arm64",
+      "status": "PASS",
+      "log": "cli-linux-arm64.json"
+    },
+    {
+      "name": "test-safeio-linux-arm64",
+      "status": "PASS",
+      "log": "test-safeio-linux-arm64.json"
+    },
+    {
+      "name": "test-updater-linux-arm64",
+      "status": "PASS",
+      "log": "test-updater-linux-arm64.json"
+    },
+    {
+      "name": "test-governance-linux-arm64",
+      "status": "PASS",
+      "log": "test-governance-linux-arm64.json"
+    },
+    {
+      "name": "test-cli-linux-arm64",
+      "status": "PASS",
+      "log": "test-cli-linux-arm64.json"
+    }
+  ],
+  "artifact_sha256": {
+    "cli.test": "e92fe7f1abcde4e2413008941a9725cb6af501d166f56ef818f189dc97fd5e19",
+    "flow.sh": "4f36dc7ac790a0c9fcb916a5a812ce42b669c2ab487a62276c1f6474d00f4699",
+    "governance.test": "fbc2f2204f10ebc29b5e64a0e30531a4178274a8fb8cc4703934d7f32d7daf53",
+    "ombp": "bb6507bd5f9ce83d2c6c3e0f2b3da5594b06fbc238d3a4727965e703540109e4",
+    "safeio.test": "1210bc724dc6701e920de6c513b6bc5670ecdb513741e5c1efc6522e41c54050",
+    "updater.test": "304f1a1f8401ac81254cca11374625e3f62dfc56297e6b6857869990a8116fab"
+  },
+  "source_stable": true
+}

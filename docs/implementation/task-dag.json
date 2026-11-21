@@ -7,12 +7,15 @@
       "title": "官方依据、依赖与品牌核实",
       "depends_on": [],
       "task_path": ".trellis/tasks/11-20-ombp-wp00",
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "deliverables": [
         "docs/implementation/DEPENDENCIES.md",
         "docs/implementation/ADAPTER-EVIDENCE.md"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/05-testing/evidence/2026-11-21-core-integration-03/results.json"
+      ],
+      "delivery_note": "依赖/官方加载机制研究已落盘；分发命名空间完整核查、原生工具加载与供应链全项待验。"
     },
     {
       "id": "WP-01",
@@ -21,14 +24,18 @@
         "WP-00"
       ],
       "task_path": ".trellis/tasks/11-20-ombp-wp01",
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "deliverables": [
         "cmd/ombp",
         "internal/model",
         "internal/strictio",
         "internal/cli"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/05-testing/evidence/2026-11-21-go-mod-validation-01/results.json",
+        "docs/05-testing/evidence/2026-11-21-strict-required-fields-01/results.json"
+      ],
+      "delivery_note": "CLI、显式配置及报告参数已交付；报告 Schema 通过退出码 0–4 和报告文件结构测试，严格解码拒绝缺少必需字段的 profile。其他业务约束仍由运行时执行。"
     },
     {
       "id": "WP-02",
@@ -37,11 +44,18 @@
         "WP-01"
       ],
       "task_path": ".trellis/tasks/11-20-ombp-wp02",
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "deliverables": [
         "internal/scanner"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/05-testing/evidence/2026-11-21-go-mod-validation-01/results.json",
+        "docs/05-testing/evidence/2026-11-21-go-mod-validation-linux-02/results.json",
+        "docs/05-testing/evidence/2026-11-21-scanner-matrix-01/scanner-race-coverage.json",
+        "docs/05-testing/evidence/2026-11-21-scanner-budget-02/results.json",
+        "docs/05-testing/evidence/2026-11-21-gomod-directive-syntax-01/results.json"
+      ],
+      "delivery_note": "六组合成夹具与资源边界有实测；Node 包管理器选择和 Go 指令语法有回归，重复或非法 Go 版本/工具链声明拒绝并标 incomplete。Go/TOML 仍是静态解析子集，真实工程精度未验。"
     },
     {
       "id": "WP-03",
@@ -50,12 +64,15 @@
         "WP-01"
       ],
       "task_path": ".trellis/tasks/11-20-ombp-wp03",
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "deliverables": [
         "internal/rules",
         "rulesets"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/05-testing/evidence/2026-11-21-provenance-recovery-02/results.json"
+      ],
+      "delivery_note": "20 条内置规则、依赖和冲突解析、P2/P3 单步显式替代已有测试；已锁版本升级、多步替代及语义审查仍需后续阶段。"
     },
     {
       "id": "WP-04",
@@ -65,12 +82,16 @@
         "WP-03"
       ],
       "task_path": ".trellis/tasks/11-20-ombp-wp04",
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "deliverables": [
         "internal/renderer",
         "internal/adapters"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/05-testing/evidence/2026-11-21-wp06-integration-01/results.json",
+        "docs/05-testing/evidence/2026-11-21-codex-native-02/results.json"
+      ],
+      "delivery_note": "Codex 根和模块指令在 macOS arm64 原生加载通过；自定义预算和其他平台仍未实测。"
     },
     {
       "id": "WP-05",
@@ -79,12 +100,16 @@
         "WP-04"
       ],
       "task_path": ".trellis/tasks/11-20-ombp-wp05",
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "deliverables": [
         "internal/updater",
         "internal/config"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/05-testing/evidence/2026-11-21-doctor-transaction-04/results.json",
+        "docs/05-testing/evidence/2026-11-21-doctor-transaction-linux-04/results.json"
+      ],
+      "delivery_note": "预览、计划应用、受管区保护与七个进程中断窗口已有回归，包括只移除死进程的孤立锁；迁移、其余平台与事务保留策略仍待验收。"
     },
     {
       "id": "WP-06",
@@ -93,11 +118,14 @@
         "WP-05"
       ],
       "task_path": ".trellis/tasks/11-20-ombp-wp06",
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "deliverables": [
         "internal/governance"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/05-testing/evidence/2026-11-21-wp06-integration-01/results.json"
+      ],
+      "delivery_note": "命令来源定位、本地指令链接诊断和显式配置/报告参数均有运行证据；按已声明的 Markdown 子集交付，保留 MVP 整体门禁。"
     },
     {
       "id": "WP-07",
@@ -106,12 +134,17 @@
         "WP-06"
       ],
       "task_path": ".trellis/tasks/11-20-ombp-wp07",
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "deliverables": [
         "tests",
         "docs/implementation/ACCEPTANCE.md"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/05-testing/evidence/2026-11-21-go-mod-validation-01/results.json",
+        "docs/05-testing/evidence/2026-11-21-go-mod-validation-linux-02/results.json",
+        "docs/05-testing/evidence/2026-11-21-codex-native-02/results.json"
+      ],
+      "delivery_note": "macOS arm64 两套 Go 全树 race、Linux arm64 CLI 和四包原生测试、Codex 四种加载场景已通过；其余平台原生矩阵与完整 MVP 门禁仍开放。"
     },
     {
       "id": "WP-08",

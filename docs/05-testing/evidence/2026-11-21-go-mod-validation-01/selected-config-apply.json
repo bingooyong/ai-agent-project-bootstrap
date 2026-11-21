@@ -1,0 +1,20 @@
+{
+  "name": "selected-config-apply",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-bv0cz83n/ombp",
+    "init",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-bv0cz83n/project",
+    "--apply",
+    "--plan",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-bv0cz83n/selected-config-plan.json",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:38:36.076777+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp init\",\n  \"mode\": \"local-write\",\n  \"operation_status\": \"complete\",\n  \"result\": \"clean\",\n  \"exit_code\": 0,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"data\": {\n    \"applied\": true,\n    \"changed_files\": 1,\n    \"plan_fingerprint\": \"781c50495dce819721e7aa1eb12ab3289598b42d3ec10ca7bf63c7ad3122403e\"\n  },\n  \"findings\": []\n}\n",
+  "stderr": "",
+  "status": "PASS"
+}

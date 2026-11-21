@@ -1,0 +1,114 @@
+{
+  "status": "PASS",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "scope": "offline core integration; cross-builds are not native runtime acceptance",
+  "source_stable": true,
+  "results": [
+    {
+      "name": "format",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/format.json"
+    },
+    {
+      "name": "module-verify",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/module-verify.json"
+    },
+    {
+      "name": "vet",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/vet.json"
+    },
+    {
+      "name": "race",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/race.json"
+    },
+    {
+      "name": "schema-freshness",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/schema-freshness.json"
+    },
+    {
+      "name": "task-and-docs",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/task-and-docs.json"
+    },
+    {
+      "name": "whitespace",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/whitespace.json"
+    },
+    {
+      "name": "build-native",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/build-native.json"
+    },
+    {
+      "name": "scan-static",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/scan-static.json"
+    },
+    {
+      "name": "init-dry-run",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/init-dry-run.json"
+    },
+    {
+      "name": "init-plan",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/init-plan.json"
+    },
+    {
+      "name": "init-apply",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/init-apply.json"
+    },
+    {
+      "name": "check-static",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/check-static.json"
+    },
+    {
+      "name": "init-idempotent",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/init-idempotent.json"
+    },
+    {
+      "name": "profile-stored",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/profile-stored.json"
+    },
+    {
+      "name": "check-protect-manual",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/check-protect-manual.json"
+    },
+    {
+      "name": "init-protect-manual",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/init-protect-manual.json"
+    },
+    {
+      "name": "cross-build-linux-amd64",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/cross-build-linux-amd64.json"
+    },
+    {
+      "name": "cross-build-linux-arm64",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/cross-build-linux-arm64.json"
+    },
+    {
+      "name": "cross-build-windows-amd64",
+      "status": "PASS",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-03/cross-build-windows-amd64.json"
+    }
+  ],
+  "remaining": [
+    "Windows strict project I/O",
+    "native Linux execution",
+    "native Agent instruction loading",
+    "later roadmap phases"
+  ]
+}

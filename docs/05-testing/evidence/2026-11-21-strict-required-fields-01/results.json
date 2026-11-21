@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "scope": "WP-01 strict required-field decoding and stored profile acceptance",
+  "platform": "macOS 26.6.2 arm64 (Darwin 25.6.0)",
+  "go_version": "go1.27.3 darwin/arm64",
+  "source_stable": true,
+  "source_sha256_before": {
+    "internal/strictio/decode.go": "54cc359ebcba77f0f1bb9a70119a6b4592fec36eb34ef0f4677a9263dbdb8003",
+    "internal/strictio/decode_test.go": "a753d883d231974846889b426d87e1a367bbff9b4b68fc83d68f82d3c1485aba",
+    "internal/cli/cli.go": "1f30528663a54810c804ed706aaec8bd2ab50d66d28b0927f2b67fc4e97c1235",
+    "internal/cli/cli_test.go": "364a80cf7a8909f3eb7da9264ca268da26f829ed1113abf94b086df0b20fb66b"
+  },
+  "source_sha256_after": {
+    "internal/strictio/decode.go": "54cc359ebcba77f0f1bb9a70119a6b4592fec36eb34ef0f4677a9263dbdb8003",
+    "internal/strictio/decode_test.go": "a753d883d231974846889b426d87e1a367bbff9b4b68fc83d68f82d3c1485aba",
+    "internal/cli/cli.go": "1f30528663a54810c804ed706aaec8bd2ab50d66d28b0927f2b67fc4e97c1235",
+    "internal/cli/cli_test.go": "364a80cf7a8909f3eb7da9264ca268da26f829ed1113abf94b086df0b20fb66b"
+  },
+  "attempts": [
+    {
+      "name": "regression reproduction before fix",
+      "command": "go test ./internal/cli -run '^TestProfileRejectsIncompleteStoredProfiles$' -count=1",
+      "exit_code": 1,
+      "result": "EXPECTED_FAILURE",
+      "observation": "The profile command returned success for missing required fields and incomplete stored coverage."
+    },
+    {
+      "name": "intermediate compile attempt",
+      "command": "go test -race -count=1 ./...",
+      "exit_code": 1,
+      "result": "FAILED_AND_FIXED",
+      "observation": "A local tag variable was referenced before definition in strict decoding; corrected before final verification."
+    }
+  ],
+  "checks": [
+    {
+      "name": "race tests",
+      "command": "go test -race -count=1 ./...",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "vet",
+      "command": "go vet ./...",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "format",
+      "command": "gofmt -l cmd internal",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "build",
+      "command": "go build -o /tmp/ombp-continuation-verification ./cmd/ombp",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "whitespace",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ],
+  "remaining": [
+    "WP-01 remains PARTIAL; broader CLI and business-schema coverage is open.",
+    "WP-02 Go and TOML parsers remain documented static subsets with extension coverage still open.",
+    "Windows strict I/O and native platform acceptance remain open.",
+    "The complete WP-00 through WP-14 goal remains PARTIAL."
+  ]
+}

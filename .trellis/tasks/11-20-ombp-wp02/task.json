@@ -3,7 +3,7 @@
   "name": "ombp-wp02",
   "title": "WP-02 有界项目扫描与证据画像",
   "description": "有界项目扫描与证据画像",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,
@@ -12,7 +12,7 @@
   "assignee": "lvyong",
   "createdAt": "2026-11-20",
   "completedAt": null,
-  "branch": null,
+  "branch": "feat/ombp-offline-core",
   "base_branch": "main",
   "worktree_path": null,
   "commit": null,
@@ -22,5 +22,7 @@
   "parent": "11-20-ombp-master",
   "relatedFiles": [],
   "notes": "",
-  "meta": {}
+  "meta": {
+    "delivery_status": "PARTIAL"
+  }
 }

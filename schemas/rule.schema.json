@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Generated from Go types. This schema describes shape only; OMBP also enforces business, source, ownership and safety invariants.",
+  "properties": {
+    "category": {
+      "type": "string"
+    },
+    "conflicts": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "constraints": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "value": {}
+        },
+        "required": [
+          "key",
+          "operator",
+          "value"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "dependencies": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "enforcement": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "id": {
+      "type": "string"
+    },
+    "overridable": {
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "type": "string"
+    },
+    "scope": {
+      "additionalProperties": false,
+      "properties": {
+        "modules": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "paths": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "modules",
+        "paths"
+      ],
+      "type": "object"
+    },
+    "severity": {
+      "enum": [
+        "P0",
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "type": "string"
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "package": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "package"
+      ],
+      "type": "object"
+    },
+    "title": {
+      "type": "string"
+    },
+    "validation": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "description"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "type": "string"
+    },
+    "when": {
+      "additionalProperties": false,
+      "properties": {
+        "databases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "frameworks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "languages": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "project_types": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "version",
+    "category",
+    "severity",
+    "source",
+    "scope",
+    "when",
+    "overridable",
+    "dependencies",
+    "conflicts",
+    "constraints",
+    "enforcement",
+    "validation"
+  ],
+  "title": "OMBP rule data shape",
+  "type": "object"
+}

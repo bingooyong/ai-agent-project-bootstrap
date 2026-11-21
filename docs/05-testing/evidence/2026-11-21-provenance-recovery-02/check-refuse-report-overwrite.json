@@ -1,0 +1,19 @@
+{
+  "name": "check-refuse-report-overwrite",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-odi9koso/ombp",
+    "check",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-odi9koso/project",
+    "--output",
+    "check-report.json",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T06:43:17.039934+00:00",
+  "exit_code": 3,
+  "expected_exit_code": 3,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp check\",\n  \"mode\": \"local-write\",\n  \"operation_status\": \"incomplete\",\n  \"result\": \"error\",\n  \"exit_code\": 3,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"coverage\": {\n    \"status\": \"complete\",\n    \"files_visited\": 3,\n    \"bytes_read\": 39,\n    \"excluded\": []\n  },\n  \"data\": {\n    \"findings\": [],\n    \"exit_code\": 0,\n    \"coverage\": {\n      \"status\": \"complete\",\n      \"files_visited\": 3,\n      \"bytes_read\": 39,\n      \"excluded\": []\n    }\n  },\n  \"findings\": [\n    {\n      \"code\": \"REPORT_WRITE_FAILED\",\n      \"severity\": \"High\",\n      \"blocking\": false,\n      \"evidence\": \"report file already exists or could not be safely created\",\n      \"method\": \"static\",\n      \"requires_confirmation\": false\n    }\n  ]\n}\n",
+  "stderr": "report file already exists or could not be safely created\n",
+  "status": "PASS"
+}

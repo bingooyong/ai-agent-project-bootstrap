@@ -1,0 +1,16 @@
+{
+  "name": "schema-freshness",
+  "command": [
+    "go",
+    "run",
+    "scripts/gen_schema.go",
+    "--check"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T06:15:24.412245+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "PASS: 6 generated data-shape schemas\n",
+  "stderr": "",
+  "status": "PASS"
+}

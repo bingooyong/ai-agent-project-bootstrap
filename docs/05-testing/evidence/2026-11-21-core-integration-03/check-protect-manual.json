@@ -1,0 +1,18 @@
+{
+  "name": "check-protect-manual",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-g3pgu46w/ombp",
+    "check",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-g3pgu46w/project",
+    "--ci",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T04:03:00.300399+00:00",
+  "exit_code": 4,
+  "expected_exit_code": 4,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp check\",\n  \"mode\": \"static\",\n  \"operation_status\": \"complete\",\n  \"result\": \"blocked\",\n  \"exit_code\": 4,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"data\": {\n    \"findings\": [\n      {\n        \"code\": \"MANAGED_OUTPUT_CHANGED\",\n        \"severity\": \"High\",\n        \"blocking\": true,\n        \"rule_ids\": [],\n        \"location\": {\n          \"path\": \"AGENTS.md\",\n          \"pointer\": \"project-core\"\n        },\n        \"evidence\": \"Generated rule content is missing, modified or unsafe to read\",\n        \"impact\": \"An update would risk losing manual edits\",\n        \"recommendation\": \"Preserve the file and review a three-way migration\",\n        \"requires_confirmation\": true,\n        \"method\": \"static\"\n      },\n      {\n        \"code\": \"REQUIRED_RULE_CONTENT_MISMATCH\",\n        \"severity\": \"High\",\n        \"blocking\": true,\n        \"rule_ids\": [],\n        \"location\": {\n          \"path\": \"AGENTS.md\",\n          \"pointer\": \"project-core\"\n        },\n        \"evidence\": \"Managed content differs from deterministic compilation despite matching source fingerprints\",\n        \"impact\": \"Required rules may have been removed even if editable hashes agree\",\n        \"recommendation\": \"Reconcile actual rule content and lock using reviewed sources\",\n        \"requires_confirmation\": true,\n        \"method\": \"static\"\n      }\n    ],\n    \"exit_code\": 4,\n    \"coverage\": {\n      \"status\": \"complete\",\n      \"files_visited\": 2,\n      \"bytes_read\": 39,\n      \"excluded\": []\n    }\n  },\n  \"findings\": [\n    {\n      \"code\": \"MANAGED_OUTPUT_CHANGED\",\n      \"severity\": \"High\",\n      \"blocking\": true,\n      \"evidence\": \"Generated rule content is missing, modified or unsafe to read\",\n      \"method\": \"static\",\n      \"location\": {\n        \"path\": \"AGENTS.md\",\n        \"pointer\": \"project-core\"\n      },\n      \"impact\": \"An update would risk losing manual edits\",\n      \"recommendation\": \"Preserve the file and review a three-way migration\",\n      \"requires_confirmation\": true\n    },\n    {\n      \"code\": \"REQUIRED_RULE_CONTENT_MISMATCH\",\n      \"severity\": \"High\",\n      \"blocking\": true,\n      \"evidence\": \"Managed content differs from deterministic compilation despite matching source fingerprints\",\n      \"method\": \"static\",\n      \"location\": {\n        \"path\": \"AGENTS.md\",\n        \"pointer\": \"project-core\"\n      },\n      \"impact\": \"Required rules may have been removed even if editable hashes agree\",\n      \"recommendation\": \"Reconcile actual rule content and lock using reviewed sources\",\n      \"requires_confirmation\": true\n    }\n  ]\n}\n",
+  "stderr": "inspection reported issues\n",
+  "status": "PASS"
+}

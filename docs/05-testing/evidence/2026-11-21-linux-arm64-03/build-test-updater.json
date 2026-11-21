@@ -1,0 +1,20 @@
+{
+  "command": [
+    "go",
+    "test",
+    "-c",
+    "-buildvcs=false",
+    "-trimpath",
+    "-o",
+    "/Users/bingooyong/Code/01Code/github.com/bingooyong/ombp-linux-jeoaqc6p/updater.test",
+    "./internal/updater"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T06:34:24.621123+00:00",
+  "expected_exit_code": 0,
+  "status": "PASS",
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "",
+  "duration_seconds": 1.237
+}

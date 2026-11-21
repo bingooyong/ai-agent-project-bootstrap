@@ -1,0 +1,17 @@
+{
+  "name": "scan-reject-duplicate-go",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-bv0cz83n/ombp",
+    "scan",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-bv0cz83n/project",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:38:35.770976+00:00",
+  "exit_code": 3,
+  "expected_exit_code": 3,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp scan\",\n  \"mode\": \"static\",\n  \"operation_status\": \"incomplete\",\n  \"result\": \"error\",\n  \"exit_code\": 3,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"coverage\": {\n    \"status\": \"incomplete\",\n    \"files_visited\": 1,\n    \"bytes_read\": 48,\n    \"excluded\": []\n  },\n  \"data\": {\n    \"schema_version\": \"1.0\",\n    \"facts\": [\n      {\n        \"kind\": \"runtime\",\n        \"name\": \"go\",\n        \"value\": \"1.25.0\",\n        \"confidence\": 1,\n        \"status\": \"declared\",\n        \"evidence\": [\n          {\n            \"path\": \"go.mod\",\n            \"pointer\": \"line:2\",\n            \"sha256\": \"bb7c3ad771b3d7bba45405d0c3c85cde8857041964bfa50f33b0a709c588f8f1\"\n          }\n        ]\n      }\n    ],\n    \"commands\": [],\n    \"modules\": [],\n    \"agent_configs\": [],\n    \"unknown_items\": [\n      \"project technical stack is unknown: no supported manifest evidence\"\n    ],\n    \"inputs\": {\n      \"go.mod\": \"bb7c3ad771b3d7bba45405d0c3c85cde8857041964bfa50f33b0a709c588f8f1\"\n    },\n    \"coverage\": {\n      \"status\": \"incomplete\",\n      \"files_visited\": 1,\n      \"bytes_read\": 48,\n      \"excluded\": []\n    }\n  },\n  \"findings\": [\n    {\n      \"code\": \"SCAN_INCOMPLETE\",\n      \"severity\": \"High\",\n      \"blocking\": true,\n      \"evidence\": \"Static scan could not finish; no runtime claim is available\",\n      \"method\": \"static\",\n      \"requires_confirmation\": false\n    }\n  ]\n}\n",
+  "stderr": "inspection reported issues\n",
+  "status": "PASS"
+}

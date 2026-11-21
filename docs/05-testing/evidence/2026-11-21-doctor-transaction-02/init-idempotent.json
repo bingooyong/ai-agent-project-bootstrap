@@ -1,0 +1,18 @@
+{
+  "name": "init-idempotent",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-ebi4yh3w/ombp",
+    "init",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-ebi4yh3w/project",
+    "--dry-run",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:09:44.798400+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp init\",\n  \"mode\": \"static\",\n  \"operation_status\": \"complete\",\n  \"result\": \"clean\",\n  \"exit_code\": 0,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"data\": {\n    \"schema_version\": \"1.0\",\n    \"tool_version\": \"0.1.0-dev\",\n    \"root\": \"/private/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-ebi4yh3w/project\",\n    \"inputs\": {\n      \".ombp/lock.yaml\": \"e5ac3793b3e173c861755cbe021b6752209dc9cf2292f25087895292726e0666\",\n      \".ombp/profile.json\": \"6dc5606034ca78c958d7250b7ac37158dff97021eddb5b1791fcd0c0257aeed6\",\n      \".ombp/project.yaml\": \"8865150160a149bd10b758b9b291e3a8523627f0bac6900510142fd6ac6a12f4\",\n      \"AGENTS.md\": \"0147d12a5346c85605a2b7a4ddd117ab9174ac032487224be7bed2b84097439a\",\n      \"AGENTS.override.md\": \"\",\n      \"go.mod\": \"7d988098943b7422794825300590e48279d30f293faeef20307388d4b8e0ab6d\"\n    },\n    \"changes\": [],\n    \"fingerprint\": \"4eb591d522d15fc9c6990a87ab0976560c29ae4790a17e8519205103408419ff\"\n  },\n  \"findings\": []\n}\n",
+  "stderr": "",
+  "status": "PASS"
+}

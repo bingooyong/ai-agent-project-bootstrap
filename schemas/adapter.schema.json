@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Generated from Go types. This schema describes shape only; OMBP also enforces business, source, ownership and safety invariants.",
+  "properties": {
+    "default_max_loaded_bytes": {
+      "type": "integer"
+    },
+    "directory_hierarchy": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "string"
+    },
+    "native_import": {
+      "type": "boolean"
+    },
+    "project_skills_path": {
+      "type": "string"
+    },
+    "rule_files": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "unsupported_features": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "rule_files",
+    "directory_hierarchy",
+    "native_import",
+    "project_skills_path",
+    "default_max_loaded_bytes",
+    "unsupported_features"
+  ],
+  "title": "OMBP adapter data shape",
+  "type": "object"
+}

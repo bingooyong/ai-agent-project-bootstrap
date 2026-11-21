@@ -1,0 +1,20 @@
+{
+  "name": "dry-run-refuse-report",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-dm6g3coz/ombp",
+    "init",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-dm6g3coz/project",
+    "--dry-run",
+    "--output",
+    "dry-run-report.json",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:01:32.248118+00:00",
+  "exit_code": 2,
+  "expected_exit_code": 2,
+  "stdout": "{\"schema_version\":\"1.0\",\"command\":\"ombp init\",\"mode\":\"static\",\"operation_status\":\"complete\",\"result\":\"error\",\"exit_code\":2,\"tool_version\":\"0.1.0-dev\",\"command_execution\":\"NOT_RUN\",\"findings\":[{\"code\":\"COMMAND_FAILED\",\"severity\":\"High\",\"blocking\":false,\"evidence\":\"Command or input validation failed; inspect transaction state before retrying a write\",\"method\":\"static\",\"requires_confirmation\":false}]}\n",
+  "stderr": "dry-run cannot persist a report\n",
+  "status": "PASS"
+}

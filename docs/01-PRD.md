@@ -4,7 +4,7 @@
 
 ## 1. 产品目标
 
-产品品牌为 **Oh My Blueprint（OMBP）**，目标仓库为 `oh-my-blueprint`，CLI 为 `ombp`，使用 `.ombp/` 项目配置、`OMBP_` 环境变量与 `ombp-` 自有包前缀。Go Module 目标为 `github.com/bingooyong/oh-my-blueprint`。当前没有 Go Module 或二进制实现，分发与仓库命名空间状态以[命名规范](08-Naming.md)为准。
+产品品牌为 **Oh My Blueprint（OMBP）**，目标仓库为 `oh-my-blueprint`，CLI 为 `ombp`，使用 `.ombp/` 项目配置、`OMBP_` 环境变量与 `ombp-` 自有包前缀。Go Module 为 `github.com/bingooyong/oh-my-blueprint`。立项基线时尚无实现；2026-11-21 已进入离线核心实施，实际能力与缺口以任务 DAG 和验收证据为准。分发与仓库命名空间状态以[命名规范](08-Naming.md)为准。
 
 让 AI Agent 在新建或已有工程中，根据实际文件理解项目，建立适用的工程规则，配置所需工作流，并在项目变化后持续发现规则漂移。
 

@@ -1,0 +1,18 @@
+{
+  "command": [
+    "docker",
+    "--context",
+    "colima",
+    "version",
+    "--format",
+    "{{.Server.Os}}/{{.Server.Arch}} {{.Server.Version}}"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T06:18:21.538629+00:00",
+  "expected_exit_code": 0,
+  "status": "PASS",
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "linux/arm64 28.4.0\n",
+  "duration_seconds": 0.071
+}

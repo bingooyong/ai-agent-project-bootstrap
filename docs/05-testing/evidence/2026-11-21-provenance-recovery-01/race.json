@@ -1,0 +1,17 @@
+{
+  "name": "race",
+  "command": [
+    "go",
+    "test",
+    "-race",
+    "-count=1",
+    "./..."
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T06:32:08.525443+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "?   \tgithub.com/bingooyong/oh-my-blueprint/cmd/ombp\t[no test files]\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/adapters\t1.486s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/cli\t3.048s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/governance\t8.006s\n?   \tgithub.com/bingooyong/oh-my-blueprint/internal/model\t[no test files]\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/renderer\t3.973s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/rules\t6.870s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/safeio\t3.235s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/scanner\t4.708s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/strictio\t2.461s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/updater\t9.981s\nok  \tgithub.com/bingooyong/oh-my-blueprint/schemas\t4.408s\n",
+  "stderr": "",
+  "status": "PASS"
+}

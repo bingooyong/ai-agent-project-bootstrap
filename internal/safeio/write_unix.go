@@ -156,6 +156,34 @@ func sameEntry(parent int, base string, old unix.Stat_t) error {
 	return nil
 }
 
+// CheckCreate checks that an output has an existing safe parent and an absent
+// destination. Replace must still use create-only mode to prevent a race.
+func (r *Root) CheckCreate(name string) error {
+	if err := writePath(name, false); err != nil {
+		return err
+	}
+	parent, err := r.open(path.Dir(name), true)
+	if errors.Is(err, unix.ELOOP) || errors.Is(err, unix.ENOTDIR) {
+		return ErrUnsafeOutput
+	}
+	if err != nil {
+		return err
+	}
+	defer parent.Close()
+	var info unix.Stat_t
+	err = unix.Fstatat(int(parent.Fd()), path.Base(name), &info, unix.AT_SYMLINK_NOFOLLOW)
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if info.Mode&unix.S_IFMT == unix.S_IFLNK {
+		return ErrUnsafeOutput
+	}
+	return fs.ErrExist
+}
+
 // Replace writes through a 0600 exclusive temporary file. Empty expected means
 // create-only: Linkat refuses any existing target atomically. Otherwise expected
 // is the old SHA-256; the caller's journal must handle any error after mutation,

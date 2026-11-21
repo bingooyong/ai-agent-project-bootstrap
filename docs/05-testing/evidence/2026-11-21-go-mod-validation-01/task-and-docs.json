@@ -1,0 +1,14 @@
+{
+  "name": "task-and-docs",
+  "command": [
+    "python3",
+    "scripts/check_plan.py"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:38:34.007518+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "PASS: 15 task contracts, acyclic dependencies, 40 local links\n",
+  "stderr": "",
+  "status": "PASS"
+}

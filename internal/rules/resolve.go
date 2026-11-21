@@ -12,39 +12,82 @@ import (
 // Resolve includes built-in rules and explicitly supplied custom rules. It never
 // reads project files, downloads packages, or evaluates natural-language text.
 func Resolve(profile model.Profile, extra []Rule) (Resolution, error) {
+	return ResolveWithOverrides(profile, extra, nil)
+}
+
+// ResolveWithOverrides validates exact local replacement records before
+// selecting rules and resolving their relationships.
+func ResolveWithOverrides(profile model.Profile, extra []Rule, records []Override) (Resolution, error) {
 	builtin, err := Builtin()
 	if err != nil {
 		return Resolution{}, err
 	}
 	all := append(builtin, extra...)
-	if len(all) > maxRules {
+	if len(all) > maxRules || len(records) > maxRules {
 		return Resolution{}, errors.New("rule count budget exceeded")
 	}
-	registry := make(map[string]Rule, len(all))
+	definitions := make(map[string]map[string]Rule, len(all))
 	for _, candidate := range all {
 		r, err := normalize(candidate)
 		if err != nil {
 			return Resolution{}, err
 		}
-		if old, exists := registry[r.ID]; exists {
-			if old.Version != r.Version || old.SHA256 != r.SHA256 {
-				return Resolution{}, fmt.Errorf("conflicting definitions for rule %s; explicit override is required and protected rules cannot be weakened", r.ID)
+		versions := definitions[r.ID]
+		if versions == nil {
+			versions = make(map[string]Rule)
+			definitions[r.ID] = versions
+		}
+		if old, exists := versions[r.Version]; exists {
+			if old.SHA256 != r.SHA256 {
+				return Resolution{}, fmt.Errorf("conflicting definitions for rule %s at the same version", r.ID)
 			}
 			old.Origins = append(old.Origins, r.Source)
 			slices.SortFunc(old.Origins, func(a, b Source) int { return strings.Compare(string(jsonBytes(a)), string(jsonBytes(b))) })
 			old.Origins = slices.Compact(old.Origins)
 			old.Source = old.Origins[0]
-			registry[r.ID] = old
+			versions[r.Version] = old
 			continue
 		}
 		r.Origins = []Source{r.Source}
-		registry[r.ID] = r
+		versions[r.Version] = r
 	}
-	ids := make([]string, 0, len(registry))
-	for id := range registry {
+	overrides := make(map[string]Override, len(records))
+	for _, record := range records {
+		o, err := normalizeOverride(record)
+		if err != nil {
+			return Resolution{}, err
+		}
+		if _, exists := overrides[o.RuleID]; exists {
+			return Resolution{}, fmt.Errorf("rule %s may have only one override record", o.RuleID)
+		}
+		if _, exists := definitions[o.RuleID]; !exists {
+			return Resolution{}, fmt.Errorf("override target rule %s is unavailable", o.RuleID)
+		}
+		overrides[o.RuleID] = o
+	}
+	ids := make([]string, 0, len(definitions))
+	for id := range definitions {
 		ids = append(ids, id)
 	}
 	slices.Sort(ids)
+	registry := make(map[string]Rule, len(definitions))
+	for _, id := range ids {
+		versions := definitions[id]
+		if record, exists := overrides[id]; exists {
+			replacement, err := applyOverride(record, versions)
+			if err != nil {
+				return Resolution{}, err
+			}
+			registry[id] = replacement
+			continue
+		}
+		if len(versions) != 1 {
+			return Resolution{}, fmt.Errorf("conflicting definitions for rule %s; explicit override is required and protected rules cannot be weakened", id)
+		}
+		for _, rule := range versions {
+			registry[id] = rule
+		}
+	}
 	state := map[string]byte{}
 	reasons := map[string][]string{}
 	var ordered []Rule
@@ -75,9 +118,14 @@ func Resolve(profile model.Profile, extra []Rule) (Resolution, error) {
 		ordered = append(ordered, r)
 		return nil
 	}
+	var applied []Override
 	for _, id := range ids {
 		if matches(profile, registry[id].When) {
 			reasons[id] = append(reasons[id], selectionReason(profile, registry[id]))
+			if record, exists := overrides[id]; exists {
+				applied = append(applied, record)
+				reasons[id] = append(reasons[id], "selected explicit replacement of "+id+"@"+record.Before.Version)
+			}
 			if err := visit(id); err != nil {
 				return Resolution{}, err
 			}
@@ -130,10 +178,11 @@ func Resolve(profile model.Profile, extra []Rule) (Resolution, error) {
 		reasons[id] = sortedUnique(values)
 	}
 	manifest := struct {
-		Rules   []Rule              `json:"rules"`
-		Reasons map[string][]string `json:"selection_reasons"`
-	}{ordered, reasons}
-	return Resolution{Rules: ordered, Fingerprint: digest(jsonBytes(manifest)), Warnings: warnings, SelectionReasons: reasons}, nil
+		Rules     []Rule              `json:"rules"`
+		Reasons   map[string][]string `json:"selection_reasons"`
+		Overrides []Override          `json:"overrides,omitempty"`
+	}{ordered, reasons, applied}
+	return Resolution{Rules: ordered, Fingerprint: digest(jsonBytes(manifest)), Warnings: warnings, SelectionReasons: reasons, Overrides: applied}, nil
 }
 
 func selectionReason(profile model.Profile, r Rule) string {

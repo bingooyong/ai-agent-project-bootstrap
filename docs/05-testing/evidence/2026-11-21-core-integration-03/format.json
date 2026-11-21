@@ -1,0 +1,17 @@
+{
+  "name": "format",
+  "command": [
+    "gofmt",
+    "-l",
+    "cmd",
+    "internal",
+    "scripts/gen_schema.go"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T04:02:46.977341+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "status": "PASS"
+}

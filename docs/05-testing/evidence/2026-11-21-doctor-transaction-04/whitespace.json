@@ -1,0 +1,15 @@
+{
+  "name": "whitespace",
+  "command": [
+    "git",
+    "diff",
+    "--check"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:27:39.666690+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "status": "PASS"
+}

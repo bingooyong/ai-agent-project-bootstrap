@@ -5,8 +5,10 @@ import (
 	"errors"
 	"path"
 	"sort"
+	"strconv"
 	"strings"
 
+	"github.com/bingooyong/oh-my-blueprint/internal/model"
 	"github.com/bingooyong/oh-my-blueprint/internal/strictio"
 )
 
@@ -53,15 +55,19 @@ func (s *scan) packageJSON(name string) error {
 	s.fact("language", "javascript", "", name, "/")
 	sort.Strings(languages)
 	s.module(cwd, name, unique(languages)...)
-	manager, ambiguous, err := s.packageManager(cwd, pkg)
+	manager, err := s.packageManager(cwd, pkg)
 	if err != nil {
 		return err
 	}
-	if ambiguous {
+	if manager.ambiguous {
 		s.profile.UnknownItems = append(s.profile.UnknownItems, name+": package manager declarations conflict or are unsupported")
 		return nil
 	}
-	s.fact("build_tool", manager, "", name, "/")
+	if len(manager.evidence) != 0 {
+		s.profile.Facts = append(s.profile.Facts, model.Fact{
+			Kind: "build_tool", Name: manager.name, Confidence: 1, Status: "declared", Evidence: manager.evidence,
+		})
+	}
 	if scripts, exists := pkg["scripts"]; exists {
 		mapping, ok := scripts.(map[string]any)
 		if !ok {
@@ -80,7 +86,11 @@ func (s *scan) packageJSON(name string) error {
 		}
 		sort.Strings(keys)
 		for _, key := range keys {
-			s.command(key, []string{manager, "run", key}, cwd, name, "/scripts/"+key, "declared")
+			s.profile.Commands = append(s.profile.Commands, model.Command{
+				Name: key, Argv: []string{manager.name, "run", key}, Cwd: cwd,
+				Status: "declared", ExecutionStatus: "NOT_RUN",
+				Evidence: append(s.evidence(name, "/scripts/"+key), manager.evidence...),
+			})
 		}
 	}
 	if v, ok := pkg["workspaces"]; ok {
@@ -123,10 +133,16 @@ func (s *scan) tsconfig(name string) error {
 	return nil
 }
 
-func (s *scan) packageManager(cwd string, pkg map[string]any) (string, bool, error) {
-	manager, explicit, ambiguous, err := s.localPackageManager(cwd, pkg)
-	if err != nil || explicit || ambiguous {
-		return manager, ambiguous, err
+type nodeManager struct {
+	name      string
+	evidence  []model.Evidence
+	ambiguous bool
+}
+
+func (s *scan) packageManager(cwd string, pkg map[string]any) (nodeManager, error) {
+	manager, err := s.localPackageManager(cwd, pkg)
+	if err != nil || manager.name != "" || manager.ambiguous {
+		return manager, err
 	}
 	// A nested module inherits only from an explicit workspace declaration,
 	// not from arbitrary parent folder names or an unrelated lockfile.
@@ -135,55 +151,76 @@ func (s *scan) packageManager(cwd string, pkg map[string]any) (string, bool, err
 		var ancestor map[string]any
 		if _, exists := s.files[manifest]; exists {
 			data, err := s.read(manifest)
-			if err != nil || !json.Valid(data) || strictio.Decode(data, &ancestor) != nil {
-				return "", false, errors.New("invalid ancestor package manifest")
-			}
-		}
-		declaredWorkspace := false
-		var patterns []string
-		if v, ok := ancestor["workspaces"]; ok {
-			patterns, err = workspacePatterns(v)
 			if err != nil {
-				return "", false, err
+				return nodeManager{}, err
 			}
-			declaredWorkspace = true
-		}
-		pnpmWorkspace := path.Join(parent, "pnpm-workspace.yaml")
-		if _, exists := s.files[pnpmWorkspace]; exists {
-			data, err := s.read(pnpmWorkspace)
-			var workspace map[string]any
-			if err != nil || strictio.Decode(data, &workspace) != nil {
-				return "", false, errors.New("invalid pnpm workspace")
+			if !json.Valid(data) || strictio.Decode(data, &ancestor) != nil || ancestor == nil {
+				return nodeManager{}, errors.New("invalid ancestor package manifest")
 			}
-			more, err := workspacePatterns(workspace["packages"])
-			if err != nil {
-				return "", false, err
-			}
-			patterns = append(patterns, more...)
-			declaredWorkspace = true
 		}
 		relative := strings.TrimPrefix(cwd, parent+"/")
 		if parent == "." {
 			relative = cwd
 		}
-		if declaredWorkspace {
-			for _, pattern := range patterns {
-				if matchGlob(pattern, relative) {
-					manager, explicit, ambiguous, err := s.localPackageManager(parent, ancestor)
-					if err != nil || ambiguous {
-						return "", ambiguous, err
-					}
-					if explicit {
-						return manager, false, nil
-					}
-				}
+		var membership []model.Evidence
+		if v, ok := ancestor["workspaces"]; ok {
+			pointer, err := workspaceMember(v, relative, "/workspaces")
+			if err != nil {
+				return nodeManager{}, err
+			}
+			if pointer != "" {
+				membership = s.evidence(manifest, pointer)
+			}
+		}
+		pnpmWorkspace := path.Join(parent, "pnpm-workspace.yaml")
+		if _, exists := s.files[pnpmWorkspace]; exists {
+			data, err := s.read(pnpmWorkspace)
+			if err != nil {
+				return nodeManager{}, err
+			}
+			var workspace map[string]any
+			if strictio.Decode(data, &workspace) != nil {
+				return nodeManager{}, errors.New("invalid pnpm workspace")
+			}
+			pointer, err := workspaceMember(workspace["packages"], relative, "/packages")
+			if err != nil {
+				return nodeManager{}, err
+			}
+			if pointer != "" {
+				membership = append(membership, s.evidence(pnpmWorkspace, pointer)...)
+			}
+		}
+		if len(membership) != 0 {
+			manager, err := s.localPackageManager(parent, ancestor)
+			if err != nil || manager.ambiguous {
+				return manager, err
+			}
+			if manager.name != "" {
+				manager.evidence = append(manager.evidence, membership...)
+				return manager, nil
 			}
 		}
 		if parent == "." {
 			break
 		}
 	}
-	return "npm", false, nil
+	return nodeManager{name: "npm"}, nil
+}
+
+func workspaceMember(value any, relative, pointer string) (string, error) {
+	patterns, err := workspacePatterns(value)
+	if err != nil {
+		return "", err
+	}
+	if _, object := value.(map[string]any); object {
+		pointer += "/packages"
+	}
+	for i, pattern := range patterns {
+		if matchGlob(pattern, relative) {
+			return pointer + "/" + strconv.Itoa(i), nil
+		}
+	}
+	return "", nil
 }
 
 func workspacePatterns(value any) ([]string, error) {
@@ -208,39 +245,40 @@ func workspacePatterns(value any) ([]string, error) {
 	return patterns, nil
 }
 
-func (s *scan) localPackageManager(cwd string, pkg map[string]any) (string, bool, bool, error) {
-	declared := ""
+func (s *scan) localPackageManager(cwd string, pkg map[string]any) (nodeManager, error) {
+	var result nodeManager
 	if value, exists := pkg["packageManager"]; exists {
 		text, ok := value.(string)
 		if !ok {
-			return "", false, false, errors.New("package manager must be a string")
+			return nodeManager{}, errors.New("package manager must be a string")
 		}
-		declared = strings.SplitN(text, "@", 2)[0]
-		if declared != "npm" && declared != "pnpm" && declared != "yarn" && declared != "bun" {
-			return "", true, true, nil
+		result.name, _, _ = strings.Cut(text, "@")
+		switch result.name {
+		case "npm", "pnpm", "yarn", "bun":
+			result.evidence = s.evidence(path.Join(cwd, "package.json"), "/packageManager")
+		default:
+			return nodeManager{ambiguous: true}, nil
 		}
 	}
-	locks := map[string]string{"package-lock.json": "npm", "npm-shrinkwrap.json": "npm", "pnpm-lock.yaml": "pnpm", "pnpm-workspace.yaml": "pnpm", "yarn.lock": "yarn", "bun.lock": "bun", "bun.lockb": "bun"}
-	managers := map[string]bool{}
-	if declared != "" {
-		managers[declared] = true
+	files := [...]struct{ name, manager string }{
+		{"bun.lock", "bun"}, {"bun.lockb", "bun"}, {"npm-shrinkwrap.json", "npm"}, {"package-lock.json", "npm"},
+		{"pnpm-lock.yaml", "pnpm"}, {"pnpm-workspace.yaml", "pnpm"}, {"yarn.lock", "yarn"},
 	}
-	for lock, manager := range locks {
-		filename := path.Join(cwd, lock)
+	for _, file := range files {
+		filename := path.Join(cwd, file.name)
 		if _, exists := s.files[filename]; exists {
 			// Hash lockfile declarations for drift evidence without interpreting
 			// or echoing URLs, resolved credentials, or installation hooks.
 			if _, err := s.read(filename); err != nil {
-				return "", false, false, err
+				return nodeManager{}, err
 			}
-			managers[manager] = true
+			result.ambiguous = result.ambiguous || (result.name != "" && result.name != file.manager)
+			result.name = file.manager
+			result.evidence = append(result.evidence, s.evidence(filename, "")...)
 		}
 	}
-	if len(managers) > 1 {
-		return "", true, true, nil
+	if result.ambiguous {
+		return nodeManager{ambiguous: true}, nil
 	}
-	for manager := range managers {
-		return manager, true, false, nil
-	}
-	return "npm", false, false, nil
+	return result, nil
 }

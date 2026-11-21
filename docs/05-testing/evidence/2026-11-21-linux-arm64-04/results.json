@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "host": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "image_id": "sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a",
+  "build_environment": {
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOTOOLCHAIN": "local",
+    "GOWORK": "off",
+    "GOFLAGS": "",
+    "CGO_ENABLED": "0",
+    "GOOS": "linux",
+    "GOARCH": "arm64"
+  },
+  "scope": "Linux arm64 runtime in isolated Docker guest, CGO and race instrumentation disabled",
+  "results": [
+    {
+      "name": "docker-context",
+      "status": "PASS",
+      "log": "docker-context.json"
+    },
+    {
+      "name": "docker-endpoint",
+      "status": "PASS",
+      "log": "docker-endpoint.json"
+    },
+    {
+      "name": "docker-server",
+      "status": "PASS",
+      "log": "docker-server.json"
+    },
+    {
+      "name": "image",
+      "status": "PASS",
+      "log": "image.json"
+    },
+    {
+      "name": "go-version",
+      "status": "PASS",
+      "log": "go-version.json"
+    },
+    {
+      "name": "build-ombp",
+      "status": "PASS",
+      "log": "build-ombp.json"
+    },
+    {
+      "name": "build-test-safeio",
+      "status": "PASS",
+      "log": "build-test-safeio.json"
+    },
+    {
+      "name": "build-test-updater",
+      "status": "PASS",
+      "log": "build-test-updater.json"
+    },
+    {
+      "name": "build-test-governance",
+      "status": "PASS",
+      "log": "build-test-governance.json"
+    },
+    {
+      "name": "build-test-cli",
+      "status": "PASS",
+      "log": "build-test-cli.json"
+    },
+    {
+      "name": "cli-linux-arm64",
+      "status": "PASS",
+      "log": "cli-linux-arm64.json"
+    },
+    {
+      "name": "test-safeio-linux-arm64",
+      "status": "PASS",
+      "log": "test-safeio-linux-arm64.json"
+    },
+    {
+      "name": "test-updater-linux-arm64",
+      "status": "PASS",
+      "log": "test-updater-linux-arm64.json"
+    },
+    {
+      "name": "test-governance-linux-arm64",
+      "status": "PASS",
+      "log": "test-governance-linux-arm64.json"
+    },
+    {
+      "name": "test-cli-linux-arm64",
+      "status": "PASS",
+      "log": "test-cli-linux-arm64.json"
+    }
+  ],
+  "artifact_sha256": {
+    "cli.test": "43c5609c47b7938e55d1b82c7db5437456b15ce1443eb8f9d091fe965df64cd2",
+    "flow.sh": "4f36dc7ac790a0c9fcb916a5a812ce42b669c2ab487a62276c1f6474d00f4699",
+    "governance.test": "752abf0365d518aed24ea6fcece8eca0a98b4b7dec1cd259812d06fe27095b84",
+    "ombp": "855e963d4f4f105738b739461c2d6fcc45f47e308b4ef9d7333dbae98fcd0af3",
+    "safeio.test": "1210bc724dc6701e920de6c513b6bc5670ecdb513741e5c1efc6522e41c54050",
+    "updater.test": "feb95a7f864fa4465d446c10b581c83468d3365b7b38070e011e8b16ca6d045c"
+  },
+  "source_stable": true
+}

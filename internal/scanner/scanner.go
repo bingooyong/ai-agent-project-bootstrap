@@ -51,13 +51,8 @@ func Scan(ctx context.Context, root string, options Options) (model.Profile, err
 	if options.MaxFiles <= 0 || options.MaxBytes <= 0 || options.MaxFileBytes <= 0 || options.MaxDepth <= 0 {
 		return s.profile, errors.New("scan budgets must be positive")
 	}
-	for _, pattern := range options.Exclude {
-		if pattern == "" || len(pattern) > 256 || strings.HasPrefix(pattern, "/") || strings.Contains(pattern, "\\") || strings.Contains(pattern, "..") {
-			return s.profile, errors.New("invalid scan exclusion pattern")
-		}
-		if _, err := path.Match(strings.ReplaceAll(pattern, "**", "*"), ""); err != nil {
-			return s.profile, errors.New("invalid scan exclusion pattern")
-		}
+	if err := ValidateExclusions(options.Exclude); err != nil {
+		return s.profile, err
 	}
 	r, err := safeio.Open(root)
 	if err != nil {
@@ -74,6 +69,19 @@ func Scan(ctx context.Context, root string, options Options) (model.Profile, err
 	}
 	s.finish()
 	return s.profile, err
+}
+
+// ValidateExclusions checks configured patterns before scanning project files.
+func ValidateExclusions(patterns []string) error {
+	for _, pattern := range patterns {
+		if pattern == "" || len(pattern) > 256 || strings.HasPrefix(pattern, "/") || strings.Contains(pattern, "\\") || strings.Contains(pattern, "..") {
+			return errors.New("invalid scan exclusion pattern")
+		}
+		if _, err := path.Match(strings.ReplaceAll(pattern, "**", "*"), ""); err != nil {
+			return errors.New("invalid scan exclusion pattern")
+		}
+	}
+	return nil
 }
 
 func (s *scan) walk(dir string, depth int) error {

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "go",
+    "test",
+    "-c",
+    "-buildvcs=false",
+    "-trimpath",
+    "-o",
+    "/Users/bingooyong/Code/01Code/github.com/bingooyong/ombp-linux-o15f4c9a/safeio.test",
+    "./internal/safeio"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:27:18.963310+00:00",
+  "expected_exit_code": 0,
+  "status": "PASS",
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "",
+  "duration_seconds": 0.525
+}

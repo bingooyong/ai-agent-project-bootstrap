@@ -1,0 +1,19 @@
+{
+  "status": "FAIL",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "scope": "offline core integration; cross-builds are not native runtime acceptance",
+  "source_stable": true,
+  "results": [
+    {
+      "name": "format",
+      "status": "FAIL",
+      "log": "docs/05-testing/evidence/2026-11-21-core-integration-02/format.json"
+    }
+  ],
+  "remaining": [
+    "Windows strict project I/O",
+    "native Linux execution",
+    "native Agent instruction loading",
+    "later roadmap phases"
+  ]
+}

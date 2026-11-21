@@ -1,0 +1,49 @@
+{
+  "command": [
+    "go",
+    "test",
+    "-race",
+    "-count=1",
+    "-cover",
+    "-v",
+    "./internal/scanner"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "environment": {
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOTOOLCHAIN": "local"
+  },
+  "go_version": "go version go1.27.3 darwin/arm64",
+  "macos_version": "26.6.2",
+  "started_at": "2026-11-21T06:13:28.576612+00:00",
+  "finished_at": "2026-11-21T06:13:31.410892+00:00",
+  "exit_code": 0,
+  "source_stable": true,
+  "source_sha256": {
+    "go.mod": "a5d304e8a4b4988e8b8fa2681317072d0bad9a1844f146262218d567fefbf806",
+    "go.sum": "d36aba122e921c071daf076e420b80ef5440ea9ac99ebf24d0e71b57ed2d128a",
+    "internal/model/profile.go": "9bee30e7bfc5c377f762da25f218715067c5e6ab8c3339362823ad72be77e22f",
+    "internal/safeio/path.go": "2214d79c35cff6163b0dcfe9044655c273c53890e28cd834d1eab4bcd492a27d",
+    "internal/safeio/reference.go": "b045f2a4f7573bcb23a815b225ba684ab03165db6071749074b681d0358cb9e9",
+    "internal/safeio/reference_other.go": "8e7f28346c45bca3976e8079d8755f9227af41d3d654175b8619bdee796d78c8",
+    "internal/safeio/reference_unix.go": "a3548d5c17dca8ca4de5cec3801982430250727e401b1e7af68847eff2c5f313",
+    "internal/safeio/root_other.go": "5bc079d1ec07c5e9d8a6546a7fe8e09586e8d84dd76bd9b9166612913892c792",
+    "internal/safeio/root_test.go": "aa0a373abcd3521e900c2c2b87e5aa21fa4d0b13ecdf3d7f99934094c6cef284",
+    "internal/safeio/root_unix.go": "23bd3bef6a2083f46b1a3b8a2584d2e62b8291cc71d72a577b4028ca069d2587",
+    "internal/safeio/write_other.go": "1839d3b77b717f032682f5b46295d034499bc8eed20e3b41dfcd828424c94c11",
+    "internal/safeio/write_test.go": "c16ec12c8dea0f7aee2bd9424e1305e418506d112a7d2732b532a383356d1907",
+    "internal/safeio/write_unix.go": "b2c5c87b2a3acbc599a98ba8d3e1d1d4463147e52e05796ccaa441d3f5191b28",
+    "internal/scanner/detect.go": "be3fc15895bf54d80e05ead80bf97bf52e1478723d4a7246d5c131120820f9da",
+    "internal/scanner/javascript.go": "929ed5c5457a12899d93a2f2545664fd0f2c29f18bc2a04892a217867bca3854",
+    "internal/scanner/matrix_test.go": "bbc1bde1d9a375587d9e0ee02d6f5c2421ea36e1f59b2267e14fb306fbb021f1",
+    "internal/scanner/python.go": "ec09d9dd6305b265e0730df899507ae5474460bda3fd589b13ee1cc694d21090",
+    "internal/scanner/scanner.go": "e4e168a07da5f13c5bebb5e8d8b96232d781a3417cfba148c7b719574769a5e2",
+    "internal/scanner/scanner_test.go": "9f7a54c00bc82c743bb49675a50807ef92b6412fafc6ff097f793903224fa4b6",
+    "internal/strictio/decode.go": "32bfbfcb0436734ad4d26f57b84ece81b2b50172cdb7901551091b850639d9da",
+    "internal/strictio/decode_test.go": "87f5a4c89761ad69612e457bd0312c1c0c22c638457ff5e96f7fb67447324bc9"
+  },
+  "stdout": "=== RUN   TestScanMVPFixtureMatrix\n=== RUN   TestScanMVPFixtureMatrix/empty\n=== PAUSE TestScanMVPFixtureMatrix/empty\n=== RUN   TestScanMVPFixtureMatrix/unknown-sql-and-directory-names\n=== PAUSE TestScanMVPFixtureMatrix/unknown-sql-and-directory-names\n=== RUN   TestScanMVPFixtureMatrix/go-multi-module\n=== PAUSE TestScanMVPFixtureMatrix/go-multi-module\n=== RUN   TestScanMVPFixtureMatrix/python-explicit-oracle-without-test-command\n=== PAUSE TestScanMVPFixtureMatrix/python-explicit-oracle-without-test-command\n=== RUN   TestScanMVPFixtureMatrix/javascript-only\n=== PAUSE TestScanMVPFixtureMatrix/javascript-only\n=== RUN   TestScanMVPFixtureMatrix/typescript-react-workspace\n=== PAUSE TestScanMVPFixtureMatrix/typescript-react-workspace\n=== CONT  TestScanMVPFixtureMatrix/typescript-react-workspace\n=== CONT  TestScanMVPFixtureMatrix/javascript-only\n=== CONT  TestScanMVPFixtureMatrix/go-multi-module\n=== CONT  TestScanMVPFixtureMatrix/python-explicit-oracle-without-test-command\n=== CONT  TestScanMVPFixtureMatrix/unknown-sql-and-directory-names\n=== CONT  TestScanMVPFixtureMatrix/empty\n--- PASS: TestScanMVPFixtureMatrix (0.00s)\n    --- PASS: TestScanMVPFixtureMatrix/empty (0.00s)\n    --- PASS: TestScanMVPFixtureMatrix/javascript-only (0.00s)\n    --- PASS: TestScanMVPFixtureMatrix/python-explicit-oracle-without-test-command (0.00s)\n    --- PASS: TestScanMVPFixtureMatrix/go-multi-module (0.00s)\n    --- PASS: TestScanMVPFixtureMatrix/typescript-react-workspace (0.01s)\n    --- PASS: TestScanMVPFixtureMatrix/unknown-sql-and-directory-names (0.01s)\n=== RUN   TestScanEmptyAndUnrelatedDirectoriesRemainUnknown\n--- PASS: TestScanEmptyAndUnrelatedDirectoriesRemainUnknown (0.00s)\n=== RUN   TestScanMixedProjectHasEvidenceAndNeverExecutesScripts\n--- PASS: TestScanMixedProjectHasEvidenceAndNeverExecutesScripts (0.01s)\n=== RUN   TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload\n=== RUN   TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload/package.json\n=== RUN   TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload/go.mod\n=== RUN   TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload/pyproject.toml\n=== RUN   TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload/requirements.txt\n--- PASS: TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload (0.00s)\n    --- PASS: TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload/package.json (0.00s)\n    --- PASS: TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload/go.mod (0.00s)\n    --- PASS: TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload/pyproject.toml (0.00s)\n    --- PASS: TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload/requirements.txt (0.00s)\n=== RUN   TestScanBudgetsAndCancellationAreNotComplete\n=== RUN   TestScanBudgetsAndCancellationAreNotComplete/file-count\n=== RUN   TestScanBudgetsAndCancellationAreNotComplete/file-bytes\n=== RUN   TestScanBudgetsAndCancellationAreNotComplete/total-bytes\n=== RUN   TestScanBudgetsAndCancellationAreNotComplete/depth\n--- PASS: TestScanBudgetsAndCancellationAreNotComplete (0.00s)\n    --- PASS: TestScanBudgetsAndCancellationAreNotComplete/file-count (0.00s)\n    --- PASS: TestScanBudgetsAndCancellationAreNotComplete/file-bytes (0.00s)\n    --- PASS: TestScanBudgetsAndCancellationAreNotComplete/total-bytes (0.00s)\n    --- PASS: TestScanBudgetsAndCancellationAreNotComplete/depth (0.00s)\n=== RUN   TestScanIgnoresSensitiveAndSymlinkContents\n--- PASS: TestScanIgnoresSensitiveAndSymlinkContents (0.00s)\n=== RUN   TestScanPackageManagerConflictDoesNotGuessCommand\n--- PASS: TestScanPackageManagerConflictDoesNotGuessCommand (0.00s)\n=== RUN   TestScanTypeScriptAndPythonStaticSubsets\n--- PASS: TestScanTypeScriptAndPythonStaticSubsets (0.00s)\n=== RUN   TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence\n=== RUN   TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence/package-workspaces\n=== RUN   TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence/pnpm-workspace\n=== RUN   TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence/unrelated-parent\n--- PASS: TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence (0.01s)\n    --- PASS: TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence/package-workspaces (0.00s)\n    --- PASS: TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence/pnpm-workspace (0.00s)\n    --- PASS: TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence/unrelated-parent (0.00s)\n=== RUN   TestScanPackageManifestRequiresJSONAndStringScripts\n--- PASS: TestScanPackageManifestRequiresJSONAndStringScripts (0.00s)\n=== RUN   TestScanDeterminismAndManifestDrift\n--- PASS: TestScanDeterminismAndManifestDrift (0.00s)\n=== RUN   TestScanControlDirectoryDoesNotChangeProjectProfile\n--- PASS: TestScanControlDirectoryDoesNotChangeProjectProfile (0.00s)\n=== RUN   TestScanExclusionsCannotEnableSecrets\n--- PASS: TestScanExclusionsCannotEnableSecrets (0.00s)\nPASS\ncoverage: 81.9% of statements\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/scanner\t1.569s\tcoverage: 81.9% of statements\n",
+  "stderr": "",
+  "scope": "synthetic offline scanner coverage and fixture assertions"
+}

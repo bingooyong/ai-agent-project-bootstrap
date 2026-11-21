@@ -3,10 +3,14 @@ package safeio
 
 import (
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"path"
 	"strings"
 )
+
+// ErrUnsafeOutput means the output path uses a link or a non-directory parent.
+var ErrUnsafeOutput = errors.New("unsafe output path")
 
 func Digest(data []byte) string { return fmt.Sprintf("%x", sha256.Sum256(data)) }
 

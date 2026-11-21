@@ -89,6 +89,7 @@ type Resolution struct {
 	Fingerprint      string              `json:"fingerprint" yaml:"fingerprint"`
 	Warnings         []string            `json:"warnings" yaml:"warnings"`
 	SelectionReasons map[string][]string `json:"selection_reasons" yaml:"selection_reasons"`
+	Overrides        []Override          `json:"overrides,omitempty" yaml:"overrides,omitempty"`
 }
 
 // Parse accepts strictly typed YAML front matter and a nonempty Markdown body.
@@ -131,21 +132,11 @@ func normalize(r Rule) (Rule, error) {
 	if (r.Severity == "P0" || r.Severity == "P1") && r.Overridable {
 		return Rule{}, fmt.Errorf("protected rule %s cannot be overridable in this version", r.ID)
 	}
-	if len(r.Scope.Modules) == 0 || len(r.Scope.Paths) == 0 {
-		return Rule{}, fmt.Errorf("rule %s requires explicit scope", r.ID)
+	scope, err := normalizeScope(r.Scope)
+	if err != nil {
+		return Rule{}, fmt.Errorf("rule %s: %w", r.ID, err)
 	}
-	for _, patterns := range [][]string{r.Scope.Modules, r.Scope.Paths} {
-		if len(patterns) > 16 {
-			return Rule{}, errors.New("scope pattern budget exceeded")
-		}
-		for _, p := range patterns {
-			if err := validateGlob(p); err != nil {
-				return Rule{}, fmt.Errorf("rule %s: %w", r.ID, err)
-			}
-		}
-	}
-	r.Scope.Modules = sortedUnique(r.Scope.Modules)
-	r.Scope.Paths = sortedUnique(r.Scope.Paths)
+	r.Scope = scope
 	for _, values := range [][]string{r.When.Languages, r.When.Frameworks, r.When.Databases, r.When.ProjectTypes} {
 		for _, v := range values {
 			if v != "*" && !validID(v) {
@@ -218,6 +209,23 @@ func normalize(r Rule) (Rule, error) {
 	canonical.Source.Path = ""
 	r.SHA256 = digest(jsonBytes(canonical))
 	return r, nil
+}
+
+func normalizeScope(scope Scope) (Scope, error) {
+	for _, patterns := range [][]string{scope.Modules, scope.Paths} {
+		if len(patterns) == 0 {
+			return Scope{}, errors.New("explicit scope is required")
+		}
+		if len(patterns) > 16 {
+			return Scope{}, errors.New("scope pattern budget exceeded")
+		}
+		for _, p := range patterns {
+			if err := validateGlob(p); err != nil {
+				return Scope{}, err
+			}
+		}
+	}
+	return Scope{Modules: sortedUnique(scope.Modules), Paths: sortedUnique(scope.Paths)}, nil
 }
 
 func normalizeConstraintValue(operator string, value any) (any, error) {

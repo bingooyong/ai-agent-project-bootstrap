@@ -1,8 +1,8 @@
 # 实施规划
 
-版本：V0.2；状态：待评审，所有产品工作包均未开始。本轮只完成文档，不据此自动进入实现或配置目标工程。
+版本：V0.2；状态：2026-11-20 建立设计，2026-11-21 已按用户明确授权进入 Trellis 实施。当前代码、阶段缺口与实际证据记录在任务 DAG 和各任务产物，尚未整体验收。
 
-全部工作包使用 Oh My Blueprint / `ombp` 命名基线，目标 Go Module、`.ombp/` 配置、`ombp-` 自有包名及 `agents` 用户命令统一遵循[命名规范](08-Naming.md)。后续 Codex/Trellis 任务书沿用这些名称；当前尚未创建该类任务。
+全部工作包使用 Oh My Blueprint / `ombp` 命名基线，目标 Go Module、`.ombp/` 配置、`ombp-` 自有包名及 `agents` 用户命令统一遵循[命名规范](08-Naming.md)。Trellis 主任务及 15 个子任务已建立，执行顺序与状态见 implementation/task-dag.json；本表保持范围与依赖规划。
 
 ## 1. 阶段与门禁
 

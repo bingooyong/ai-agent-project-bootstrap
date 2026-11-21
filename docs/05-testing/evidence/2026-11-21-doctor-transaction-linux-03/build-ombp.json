@@ -1,0 +1,19 @@
+{
+  "command": [
+    "go",
+    "build",
+    "-buildvcs=false",
+    "-trimpath",
+    "-o",
+    "/Users/bingooyong/Code/01Code/github.com/bingooyong/ombp-linux-tzt6vg1f/ombp",
+    "./cmd/ombp"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:25:42.092327+00:00",
+  "expected_exit_code": 0,
+  "status": "PASS",
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "",
+  "duration_seconds": 0.869
+}

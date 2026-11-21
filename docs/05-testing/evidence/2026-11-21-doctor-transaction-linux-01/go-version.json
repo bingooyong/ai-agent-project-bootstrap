@@ -1,0 +1,14 @@
+{
+  "command": [
+    "go",
+    "version"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:03:07.571203+00:00",
+  "expected_exit_code": 0,
+  "status": "PASS",
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "go version go1.27.3 darwin/arm64\n",
+  "duration_seconds": 0.012
+}

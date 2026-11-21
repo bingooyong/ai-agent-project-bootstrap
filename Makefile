@@ -1,5 +1,5 @@
 GO ?= go
-.PHONY: build test vet format check
+.PHONY: build test vet format schema check
 build:
 	mkdir -p build
 	$(GO) build -trimpath -o build/ombp ./cmd/ombp
@@ -8,6 +8,8 @@ test:
 vet:
 	$(GO) vet ./...
 format:
-	@test -z "$$(gofmt -l cmd internal)"
-check: format vet test
+	@test -z "$$(gofmt -l cmd internal scripts/gen_schema.go)"
+schema:
+	$(GO) run scripts/gen_schema.go --check
+check: format vet test schema
 	python3 scripts/check_plan.py

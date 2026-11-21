@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Generated from Go types. This schema describes shape only; OMBP also enforces business, source, ownership and safety invariants.",
+  "properties": {
+    "agent_configs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "commands": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "argv": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "cwd": {
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "pointer": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "execution_status": {
+            "const": "NOT_RUN",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "argv",
+          "cwd",
+          "status",
+          "execution_status",
+          "evidence"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "bytes_read": {
+          "type": "integer"
+        },
+        "counters_omitted": {
+          "type": "boolean"
+        },
+        "excluded": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "files_visited": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "files_visited",
+        "bytes_read",
+        "excluded"
+      ],
+      "type": "object"
+    },
+    "facts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "type": "number"
+          },
+          "conflict": {
+            "type": "boolean"
+          },
+          "declared_source": {
+            "type": "string"
+          },
+          "declared_value": {
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "pointer": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "name",
+          "confidence",
+          "status",
+          "evidence"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "inputs": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "modules": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "languages": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "manifest": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "manifest",
+          "languages"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "type": "string"
+    },
+    "unknown_items": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "facts",
+    "commands",
+    "modules",
+    "agent_configs",
+    "unknown_items",
+    "inputs",
+    "coverage"
+  ],
+  "title": "OMBP project-profile data shape",
+  "type": "object"
+}

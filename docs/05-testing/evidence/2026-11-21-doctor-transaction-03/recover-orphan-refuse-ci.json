@@ -1,0 +1,21 @@
+{
+  "name": "recover-orphan-refuse-ci",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-aayge6q7/ombp",
+    "recover",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-aayge6q7/project",
+    "--apply",
+    "--mutex-sha",
+    "f2137ff2d03f4cd3f764dff89a6b0c095dac40c807e213ec5a388045c40f3284",
+    "--ci",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:18:22.374092+00:00",
+  "exit_code": 2,
+  "expected_exit_code": 2,
+  "stdout": "{\"schema_version\":\"1.0\",\"command\":\"ombp recover\",\"mode\":\"static\",\"operation_status\":\"complete\",\"result\":\"error\",\"exit_code\":2,\"tool_version\":\"0.1.0-dev\",\"command_execution\":\"NOT_RUN\",\"findings\":[{\"code\":\"COMMAND_FAILED\",\"severity\":\"High\",\"blocking\":false,\"evidence\":\"Command or input validation failed; inspect transaction state before retrying a write\",\"method\":\"static\",\"requires_confirmation\":false}]}\n",
+  "stderr": "recovery apply requires exactly one reviewed digest (--journal-sha or --mutex-sha), outside CI\n",
+  "status": "PASS"
+}

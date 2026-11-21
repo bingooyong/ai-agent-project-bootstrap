@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/fs"
 	"path"
-	"slices"
 	"strings"
 
 	"github.com/bingooyong/oh-my-blueprint/internal/safeio"
@@ -14,6 +13,15 @@ import (
 
 //go:embed builtin/*.md
 var builtinFiles embed.FS
+
+const customDir = ".ombp/rules/custom"
+
+// Project keeps decoded inputs and the raw digests of the bytes they came from.
+type Project struct {
+	Rules     []Rule
+	Overrides []Override
+	Inputs    map[string]string
+}
 
 // Builtin reads the single version-controlled embedded rule source.
 func Builtin() ([]Rule, error) {
@@ -45,42 +53,82 @@ func LoadCustom(root string) ([]Rule, error) {
 		return nil, err
 	}
 	defer r.Close()
-	const directory = ".ombp/rules/custom"
-	entries, err := r.ReadDir(directory)
+	p := Project{Rules: []Rule{}}
+	if err := loadCustom(r, &p); err != nil {
+		return nil, err
+	}
+	return p.Rules, nil
+}
+
+// LoadProject loads only the documented directories using anchored, bounded
+// reads. Input digests describe the same bytes that passed validation.
+func LoadProject(root string) (Project, error) {
+	r, err := safeio.Open(root)
+	if err != nil {
+		return Project{}, err
+	}
+	defer r.Close()
+	project := Project{Rules: []Rule{}, Overrides: []Override{}, Inputs: map[string]string{}}
+	if err := loadCustom(r, &project); err != nil {
+		return Project{}, err
+	}
+	if err := loadRuleSources(r, overridesDir, ".yaml", maxOverrideBytes, project.Inputs, func(name string, data []byte) error {
+		record, err := parseOverride(data)
+		if err != nil {
+			return err
+		}
+		record.Path = name
+		project.Overrides = append(project.Overrides, record)
+		return nil
+	}); err != nil {
+		return Project{}, err
+	}
+	return project, nil
+}
+
+func loadCustom(r *safeio.Root, project *Project) error {
+	return loadRuleSources(r, customDir, ".md", maxRuleBytes, project.Inputs, func(name string, data []byte) error {
+		rule, err := Parse(data)
+		if err != nil {
+			return err
+		}
+		rule.Source.Path = name
+		project.Rules = append(project.Rules, rule)
+		return nil
+	})
+}
+
+func loadRuleSources(r *safeio.Root, directory, suffix string, fileLimit int64, inputs map[string]string, parse func(string, []byte) error) error {
+	entries, err := r.ReadDirLimit(directory, maxRules)
 	if errors.Is(err, fs.ErrNotExist) {
-		return []Rule{}, nil
+		return nil
 	}
 	if err != nil {
-		return nil, fmt.Errorf("custom rule directory: %w", err)
+		return fmt.Errorf("rule directory %s: %w", directory, err)
 	}
-	if len(entries) > maxRules {
-		return nil, errors.New("custom rule directory entry budget exceeded")
-	}
-	slices.SortFunc(entries, func(a, b fs.DirEntry) int { return strings.Compare(a.Name(), b.Name()) })
-	out := make([]Rule, 0, len(entries))
 	var total int
 	for _, entry := range entries {
-		if !strings.HasSuffix(entry.Name(), ".md") {
+		if !strings.HasSuffix(entry.Name(), suffix) {
 			continue
 		}
-		name := path.Join(directory, entry.Name())
-		if entry.Type()&fs.ModeSymlink != 0 || entry.IsDir() {
-			return nil, fmt.Errorf("custom rule %s is not a regular rule file", name)
+		if strings.Contains(entry.Name(), "/") || entry.Type()&fs.ModeType != 0 {
+			return errors.New("rule source is not a regular file")
 		}
-		data, err := r.Read(name, maxRuleBytes)
+		name := path.Join(directory, entry.Name())
+		data, err := r.Read(name, fileLimit)
 		if err != nil {
-			return nil, fmt.Errorf("custom rule %s: %w", name, err)
+			return fmt.Errorf("cannot safely read rule source in %s", directory)
 		}
 		total += len(data)
 		if total > 4<<20 {
-			return nil, errors.New("custom rule total byte budget exceeded")
+			return errors.New("rule source total byte budget exceeded")
 		}
-		rule, err := Parse(data)
-		if err != nil {
-			return nil, fmt.Errorf("custom rule %s: %w", name, err)
+		if err := parse(name, data); err != nil {
+			return fmt.Errorf("rule source %q: %w", name, err)
 		}
-		rule.Source.Path = name
-		out = append(out, rule)
+		if inputs != nil {
+			inputs[name] = safeio.Digest(data)
+		}
 	}
-	return out, nil
+	return nil
 }

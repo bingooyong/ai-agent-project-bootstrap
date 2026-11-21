@@ -1,0 +1,19 @@
+{
+  "name": "doctor-transaction-state-unverified",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-bv0cz83n/ombp",
+    "doctor",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-bv0cz83n/project",
+    "--config",
+    "engineering.yaml",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:38:36.427426+00:00",
+  "exit_code": 3,
+  "expected_exit_code": 3,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp doctor\",\n  \"mode\": \"static\",\n  \"operation_status\": \"incomplete\",\n  \"result\": \"error\",\n  \"exit_code\": 3,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"data\": {\n    \"architecture\": \"arm64\",\n    \"global_settings_changed\": false,\n    \"network_accessed\": false,\n    \"os\": \"darwin\"\n  },\n  \"findings\": [\n    {\n      \"code\": \"TRANSACTION_STATE_UNVERIFIED\",\n      \"severity\": \"High\",\n      \"blocking\": true,\n      \"evidence\": \"Transaction state could not be safely inspected\",\n      \"method\": \"static\",\n      \"requires_confirmation\": false\n    }\n  ]\n}\n",
+  "stderr": "inspection reported issues\n",
+  "status": "PASS"
+}

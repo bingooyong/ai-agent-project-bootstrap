@@ -1,0 +1,18 @@
+{
+  "name": "init-protect-manual",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-g3pgu46w/ombp",
+    "init",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-g3pgu46w/project",
+    "--dry-run",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T04:03:00.310103+00:00",
+  "exit_code": 4,
+  "expected_exit_code": 4,
+  "stdout": "{\"schema_version\":\"1.0\",\"command\":\"ombp init\",\"mode\":\"static\",\"operation_status\":\"complete\",\"result\":\"blocked\",\"exit_code\":4,\"tool_version\":\"0.1.0-dev\",\"command_execution\":\"NOT_RUN\",\"findings\":[{\"code\":\"COMMAND_FAILED\",\"severity\":\"High\",\"blocking\":true,\"evidence\":\"Command or input validation failed; inspect transaction state before retrying a write\",\"method\":\"static\",\"requires_confirmation\":false}]}\n",
+  "stderr": "plan blocked by project configuration, source or output protection; run doctor/check for diagnostics\n",
+  "status": "PASS"
+}

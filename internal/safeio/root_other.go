@@ -9,6 +9,8 @@ import (
 
 type Root struct{}
 
+func OpenExternalParent(string) (*Root, string, error) { return nil, "", errUnsupported }
+
 var errUnsupported = errors.New("strict descriptor-relative project reads are currently supported on macOS and Linux only")
 
 func Open(string) (*Root, error)                              { return nil, errUnsupported }

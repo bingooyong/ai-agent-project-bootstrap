@@ -22,5 +22,7 @@
   "parent": "11-20-ombp-master",
   "relatedFiles": [],
   "notes": "",
-  "meta": {}
+  "meta": {
+    "delivery_status": "PARTIAL"
+  }
 }

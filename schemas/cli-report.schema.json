@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Generated from Go types. This schema describes shape only; OMBP also enforces business, source, ownership and safety invariants.",
+  "properties": {
+    "command": {
+      "type": "string"
+    },
+    "command_execution": {
+      "const": "NOT_RUN",
+      "type": "string"
+    },
+    "coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "bytes_read": {
+          "type": "integer"
+        },
+        "counters_omitted": {
+          "type": "boolean"
+        },
+        "excluded": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "files_visited": {
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "incomplete"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "files_visited",
+        "bytes_read",
+        "excluded"
+      ],
+      "type": "object"
+    },
+    "data": {
+      "description": "Command-specific payload. Saved reports can contain less detail than stdout."
+    },
+    "exit_code": {
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "type": "integer"
+    },
+    "findings": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "blocking": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "string"
+          },
+          "impact": {
+            "type": "string"
+          },
+          "location": {
+            "additionalProperties": false,
+            "properties": {
+              "line": {
+                "type": "integer"
+              },
+              "path": {
+                "type": "string"
+              },
+              "pointer": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path"
+            ],
+            "type": "object"
+          },
+          "method": {
+            "const": "static",
+            "type": "string"
+          },
+          "recommendation": {
+            "type": "string"
+          },
+          "requires_confirmation": {
+            "type": "boolean"
+          },
+          "rule_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "severity": {
+            "enum": [
+              "Critical",
+              "High",
+              "Medium",
+              "Low",
+              "Informational"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "severity",
+          "blocking",
+          "evidence",
+          "method",
+          "requires_confirmation"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "mode": {
+      "enum": [
+        "static",
+        "local-write"
+      ],
+      "type": "string"
+    },
+    "operation_status": {
+      "enum": [
+        "complete",
+        "incomplete"
+      ],
+      "type": "string"
+    },
+    "result": {
+      "enum": [
+        "clean",
+        "issues_found",
+        "blocked",
+        "error"
+      ],
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "type": "string"
+    },
+    "tool_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "command",
+    "mode",
+    "operation_status",
+    "result",
+    "exit_code",
+    "tool_version",
+    "command_execution",
+    "findings"
+  ],
+  "title": "OMBP cli-report data shape",
+  "type": "object"
+}

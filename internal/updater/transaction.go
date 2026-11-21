@@ -55,8 +55,8 @@ func acquire(r *safeio.Root) (func() error, error) {
 // same root, sources and outputs before any product output is changed.
 func Apply(ctx context.Context, p Plan, version string) error { return apply(ctx, p, version, nil) }
 
-func apply(ctx context.Context, p Plan, version string, hook func(string, string)) error {
-	if p.SchemaVersion != "1.0" || p.ToolVersion != version || planDigest(p) != p.Fingerprint {
+func apply(ctx context.Context, p Plan, version string, hook func(string, string)) (result error) {
+	if p.SchemaVersion != "1.0" || p.ToolVersion != version || ValidateConfigPath(p.ConfigPath) != nil || planDigest(p) != p.Fingerprint {
 		return errors.New("plan protocol or fingerprint mismatch")
 	}
 	r, err := safeio.Open(p.Root)
@@ -68,8 +68,11 @@ func apply(ctx context.Context, p Plan, version string, hook func(string, string
 	if err != nil {
 		return err
 	}
-	defer release()
-	fresh, err := Build(ctx, p.Root, version)
+	defer func() { result = errors.Join(result, release()) }()
+	if hook != nil {
+		hook("mutex-acquired", "")
+	}
+	fresh, err := BuildWithConfig(ctx, p.Root, version, p.ConfigPath)
 	if err != nil {
 		return err
 	}
@@ -149,14 +152,20 @@ func apply(ctx context.Context, p Plan, version string, hook func(string, string
 	if hook != nil {
 		hook("committed", "")
 	}
-	return r.RemoveIf(journalPath, safeio.Digest(committed))
+	if err := r.RemoveIf(journalPath, safeio.Digest(committed)); err != nil {
+		return err
+	}
+	if hook != nil {
+		hook("journal-removed", "")
+	}
+	return nil
 }
 
 func allowedOutput(name string) bool {
 	if safeio.ValidatePath(name) != nil || safeio.Sensitive(name) {
 		return false
 	}
-	return name == configPath || name == profilePath || name == lockPath || path.Base(name) == "AGENTS.md" && !strings.HasPrefix(name, ".ombp/")
+	return name == DefaultConfigPath || name == profilePath || name == lockPath || path.Base(name) == "AGENTS.md" && !strings.HasPrefix(name, ".ombp/")
 }
 
 func validateJournal(j journal, root string) error {
@@ -171,6 +180,14 @@ func validateJournal(j journal, root string) error {
 		seen[e.Path] = true
 	}
 	return nil
+}
+
+func decodeJournal(data []byte, root string) (journal, error) {
+	var j journal
+	if strictio.Decode(data, &j) != nil {
+		return j, errors.New("invalid recovery journal")
+	}
+	return j, validateJournal(j, root)
 }
 
 func rollback(r *safeio.Root, j journal) error {
@@ -215,9 +232,67 @@ func rollback(r *safeio.Root, j journal) error {
 	return nil
 }
 
-// Recover is an explicit local recovery operation. A live/unknown lock owner
-// prevents recovery; a dead process's lock is removed only by matching content.
-func Recover(root string) error {
+type RecoveryReview struct {
+	JournalSHA256 string          `json:"journal_sha256,omitempty"`
+	MutexSHA256   string          `json:"mutex_sha256,omitempty"`
+	State         string          `json:"state"`
+	Entries       []RecoveryEntry `json:"entries"`
+}
+type RecoveryEntry struct {
+	Path                  string `json:"path"`
+	Old                   string `json:"old_content"`
+	Current               string `json:"current_content"`
+	ExpectedCurrentSHA256 string `json:"new_sha256"`
+}
+
+// ReviewRecovery is read-only. Repository state is not an authenticated command:
+// callers must review the displayed conditional restoration before applying it.
+func ReviewRecovery(root string) (RecoveryReview, error) {
+	abs, e := filepath.Abs(root)
+	if e != nil {
+		return RecoveryReview{}, e
+	}
+	abs, e = filepath.EvalSymlinks(abs)
+	if e != nil {
+		return RecoveryReview{}, e
+	}
+	r, e := safeio.Open(abs)
+	if e != nil {
+		return RecoveryReview{}, e
+	}
+	defer r.Close()
+	b, e := r.Read(journalPath, 4<<20)
+	if errors.Is(e, fs.ErrNotExist) {
+		mutex, err := readOrphanedMutex(r)
+		if err != nil {
+			return RecoveryReview{}, err
+		}
+		return RecoveryReview{MutexSHA256: orphanReviewDigest(abs, mutex), State: "orphaned_mutex", Entries: []RecoveryEntry{}}, nil
+	}
+	if e != nil {
+		return RecoveryReview{}, e
+	}
+	j, e := decodeJournal(b, abs)
+	if e != nil {
+		return RecoveryReview{}, e
+	}
+	review := RecoveryReview{JournalSHA256: safeio.Digest(b), State: j.State, Entries: []RecoveryEntry{}}
+	for _, entry := range j.Entries {
+		current, e := readOptional(r, entry.Path)
+		if e != nil {
+			return RecoveryReview{}, e
+		}
+		review.Entries = append(review.Entries, RecoveryEntry{entry.Path, entry.Old, string(current), entry.NewSHA256})
+	}
+	return review, nil
+}
+
+// Recover applies a specifically reviewed journal, never an arbitrary new state
+// file. A live/unknown lock owner prevents recovery; hashes protect user edits.
+func Recover(root string, reviewedSHA256 string) (result error) {
+	if !validReviewDigest(reviewedSHA256) {
+		return errors.New("recovery requires the reviewed journal SHA-256")
+	}
 	abs, err := filepath.Abs(root)
 	if err != nil {
 		return err
@@ -231,16 +306,21 @@ func Recover(root string) error {
 		return err
 	}
 	defer r.Close()
+	before, e := r.Read(journalPath, 4<<20)
+	if e != nil {
+		return e
+	}
+	if safeio.Digest(before) != reviewedSHA256 {
+		return errors.New("recovery journal changed after review")
+	}
+	if _, err := decodeJournal(before, abs); err != nil {
+		return err
+	}
 	if b, e := readOptional(r, mutexPath); e != nil {
 		return e
 	} else if b != nil {
-		var o owner
-		if strictio.Decode(b, &o) != nil || o.PID <= 0 {
-			return errors.New("write lock owner is unknown; preserve it for inspection")
-		}
-		alive, known := processAlive(o.PID)
-		if !known || alive {
-			return errors.New("cannot recover while the write owner is alive or unknown")
+		if err := requireDeadOwner(b); err != nil {
+			return err
 		}
 		if err := r.RemoveIf(mutexPath, safeio.Digest(b)); err != nil {
 			return err
@@ -250,19 +330,19 @@ func Recover(root string) error {
 	if err != nil {
 		return err
 	}
-	defer release()
+	defer func() { result = errors.Join(result, release()) }()
 	b, err := readOptional(r, journalPath)
 	if err != nil {
 		return err
 	}
 	if b == nil {
-		return nil
+		return errors.New("reviewed recovery journal is no longer present")
 	}
-	var j journal
-	if strictio.Decode(b, &j) != nil {
-		return errors.New("recovery journal could not be decoded")
+	if safeio.Digest(b) != reviewedSHA256 {
+		return errors.New("recovery journal changed after review")
 	}
-	if err := validateJournal(j, abs); err != nil {
+	j, err := decodeJournal(b, abs)
+	if err != nil {
 		return err
 	}
 	if j.State == "committed" {
@@ -281,29 +361,21 @@ func Recover(root string) error {
 // SavePlan explicitly creates a caller-selected file and never overwrites it.
 // It has the same no-follow protection as project I/O, even outside the target.
 func SavePlan(name string, p Plan) error {
-	abs, err := filepath.Abs(name)
-	if err != nil {
-		return err
-	}
-	r, err := safeio.Open(filepath.Dir(abs))
+	r, base, err := safeio.OpenExternalParent(name)
 	if err != nil {
 		return err
 	}
 	defer r.Close()
-	return r.Replace(filepath.Base(abs), encode(p), "")
+	return r.Replace(base, encode(p), "")
 }
 
 func ReadPlan(name string) (Plan, error) {
-	abs, err := filepath.Abs(name)
-	if err != nil {
-		return Plan{}, err
-	}
-	r, err := safeio.Open(filepath.Dir(abs))
+	r, base, err := safeio.OpenExternalParent(name)
 	if err != nil {
 		return Plan{}, err
 	}
 	defer r.Close()
-	b, err := r.Read(filepath.Base(abs), 4<<20)
+	b, err := r.Read(base, 4<<20)
 	if err != nil {
 		return Plan{}, err
 	}

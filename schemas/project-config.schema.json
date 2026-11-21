@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Generated from Go types. This schema describes shape only; OMBP also enforces business, source, ownership and safety invariants.",
+  "properties": {
+    "agents": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "declarations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "name",
+          "value",
+          "reason"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "exclude": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "agents"
+  ],
+  "title": "OMBP project-config data shape",
+  "type": "object"
+}

@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"slices"
 	"strings"
 	"testing"
 
@@ -107,19 +108,43 @@ func TestScanMixedProjectHasEvidenceAndNeverExecutesScripts(t *testing.T) {
 
 func TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload(t *testing.T) {
 	for name, content := range map[string]string{
-		"package.json":     `{"scripts":{"test":"SECRET_REJECTED_PAYLOAD"},"scripts":{}}`,
-		"go.mod":           "module\nrequire (\n",
-		"pyproject.toml":   "[project]\nname = 'ok'\nname = 'SECRET_REJECTED_PAYLOAD'\n",
-		"requirements.txt": "bad requirement SECRET_REJECTED_PAYLOAD\n",
+		"package.json":            `{"scripts":{"test":"SECRET_REJECTED_PAYLOAD"},"scripts":{}}`,
+		"go.mod":                  "module\nrequire (\n",
+		"duplicate-go.mod":        "module example.test/fixture\ngo 1.25\ngo 1.26\n",
+		"duplicate-toolchain.mod": "module example.test/fixture\ngo 1.25\ntoolchain go1.25.1\ntoolchain go1.25.2\n",
+		"invalid-go-version.mod":  "module example.test/fixture\ngo 01.25\n",
+		"invalid-toolchain.mod":   "module example.test/fixture\ngo 1.25\ntoolchain unsupported\n",
+		"nested-go-directive.mod": "module example.test/fixture\nrequire (\ngo 1.26\n)\n",
+		"pyproject.toml":          "[project]\nname = 'ok'\nname = 'SECRET_REJECTED_PAYLOAD'\n",
+		"requirements.txt":        "bad requirement SECRET_REJECTED_PAYLOAD\n",
 	} {
 		t.Run(name, func(t *testing.T) {
-			dir := project(t, map[string]string{name: content})
+			filename := name
+			if strings.HasSuffix(name, ".mod") {
+				filename = "go.mod"
+			}
+			dir := project(t, map[string]string{filename: content})
 			p, err := Scan(t.Context(), dir, DefaultOptions())
 			if err == nil || p.Coverage.Status != "incomplete" {
 				t.Fatalf("accepted invalid manifest: %v %#v", err, p)
 			}
 			if strings.Contains(err.Error(), "SECRET_REJECTED_PAYLOAD") {
 				t.Fatal("parser error leaked source payload")
+			}
+		})
+	}
+}
+
+func TestScanAcceptsGoVersionAndToolchainForms(t *testing.T) {
+	for _, directive := range []string{
+		"go 1.26rc1\ntoolchain go1.26rc1-custom\n",
+		"go 1.27.0\ntoolchain default\n",
+	} {
+		t.Run(strings.ReplaceAll(strings.TrimSpace(directive), "\n", "_"), func(t *testing.T) {
+			dir := project(t, map[string]string{"go.mod": "module example.test/fixture\n" + directive})
+			profile, err := Scan(t.Context(), dir, DefaultOptions())
+			if err != nil || profile.Coverage.Status != "complete" {
+				t.Fatalf("valid Go version or toolchain was rejected: err=%v coverage=%+v", err, profile.Coverage)
 			}
 		})
 	}
@@ -219,10 +244,12 @@ func TestScanTypeScriptAndPythonStaticSubsets(t *testing.T) {
 func TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence(t *testing.T) {
 	for _, test := range []struct {
 		name, root, workspace, expected string
+		selectors                       []string
 	}{
-		{"package-workspaces", `{"packageManager":"pnpm@9","workspaces":["packages/*"]}`, "", "pnpm"},
-		{"pnpm-workspace", `{}`, "packages: ['packages/*']\n", "pnpm"},
-		{"unrelated-parent", `{"packageManager":"pnpm@9"}`, "", "npm"},
+		{"package-workspaces", `{"packageManager":"pnpm@9","workspaces":["other/*","packages/*"]}`, "", "pnpm", []string{"package.json#/packageManager", "package.json#/workspaces/1"}},
+		{"workspaces-object", `{"packageManager":"yarn@4","workspaces":{"packages":["packages/*"]}}`, "", "yarn", []string{"package.json#/packageManager", "package.json#/workspaces/packages/0"}},
+		{"pnpm-workspace", `{}`, "packages: ['packages/*']\n", "pnpm", []string{"pnpm-workspace.yaml#", "pnpm-workspace.yaml#/packages/0"}},
+		{"unrelated-parent", `{"packageManager":"pnpm@9","workspaces":["other/*"]}`, "", "npm", nil},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			files := map[string]string{"package.json": test.root, "packages/web/package.json": `{"scripts":{"test":"echo do-not-run"}}`}
@@ -236,7 +263,75 @@ func TestScanWorkspacePackageManagerUsesExplicitAncestorEvidence(t *testing.T) {
 			if len(p.Commands) != 1 || p.Commands[0].Cwd != "packages/web" || p.Commands[0].Argv[0] != test.expected {
 				t.Fatalf("workspace invocation mismatch: %#v", p.Commands)
 			}
+			want := append([]string{"packages/web/package.json#/scripts/test"}, test.selectors...)
+			assertNodeCommandEvidence(t, files, p, want)
 		})
+	}
+}
+
+func TestScanLocalNodePackageManagerSelectors(t *testing.T) {
+	for _, test := range []struct {
+		name      string
+		files     map[string]string
+		manager   string
+		selectors []string
+	}{
+		{
+			name: "package-manager-and-agreeing-locks",
+			files: map[string]string{
+				"package.json": `{"packageManager":"bun@1","scripts":{"test":"echo do-not-run"}}`,
+				"bun.lockb":    "legacy lock bytes", "bun.lock": "text lock bytes",
+			},
+			manager: "bun", selectors: []string{"package.json#/packageManager", "bun.lock#", "bun.lockb#"},
+		},
+		{
+			name:    "lock-only",
+			files:   map[string]string{"package.json": `{"scripts":{"test":"echo do-not-run"}}`, "yarn.lock": "lock bytes"},
+			manager: "yarn", selectors: []string{"yarn.lock#"},
+		},
+		{
+			name:    "implicit-npm-convention",
+			files:   map[string]string{"package.json": `{"scripts":{"test":"echo do-not-run"}}`},
+			manager: "npm",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			p, err := Scan(t.Context(), project(t, test.files), DefaultOptions())
+			if err != nil || len(p.Commands) != 1 || !slices.Equal(p.Commands[0].Argv, []string{test.manager, "run", "test"}) {
+				t.Fatalf("invocation mismatch: %v, %#v", err, p.Commands)
+			}
+			want := append([]string{"package.json#/scripts/test"}, test.selectors...)
+			assertNodeCommandEvidence(t, test.files, p, want)
+			var managerFacts []model.Fact
+			for _, fact := range p.Facts {
+				if fact.Kind == "build_tool" {
+					managerFacts = append(managerFacts, fact)
+				}
+			}
+			if len(test.selectors) == 0 {
+				if len(managerFacts) != 0 {
+					t.Fatalf("fallback reported as declared build-tool fact: %#v", managerFacts)
+				}
+			} else if len(managerFacts) != 1 || managerFacts[0].Name != test.manager || !slices.Equal(managerFacts[0].Evidence, p.Commands[0].Evidence[1:]) {
+				t.Fatalf("manager fact and command selectors disagree: %#v, %#v", managerFacts, p.Commands)
+			}
+		})
+	}
+}
+
+func assertNodeCommandEvidence(t *testing.T, files map[string]string, p model.Profile, want []string) {
+	t.Helper()
+	c := p.Commands[0]
+	if c.Status != "declared" || c.ExecutionStatus != "NOT_RUN" {
+		t.Fatalf("command declaration quality changed: %#v", c)
+	}
+	matrixEvidence(t, files, p.Inputs, c.Evidence) // All digests must match fixture bytes and the input ledger.
+	got := make([]string, 0, len(c.Evidence))
+	for _, e := range c.Evidence {
+		got = append(got, e.Path+"#"+e.Pointer)
+	}
+	if !slices.Equal(got, want) {
+		t.Errorf("command evidence = %q, want %q", got, want)
 	}
 }
 

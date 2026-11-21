@@ -1,0 +1,17 @@
+{
+  "name": "go125-race",
+  "command": [
+    "/Users/bingooyong/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.5.darwin-arm64/bin/go",
+    "test",
+    "-race",
+    "-count=1",
+    "./..."
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:09:32.084669+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "?   \tgithub.com/bingooyong/oh-my-blueprint/cmd/ombp\t[no test files]\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/adapters\t1.489s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/cli\t2.897s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/governance\t8.620s\n?   \tgithub.com/bingooyong/oh-my-blueprint/internal/model\t[no test files]\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/renderer\t2.663s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/rules\t6.447s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/safeio\t4.199s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/scanner\t5.745s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/strictio\t3.438s\nok  \tgithub.com/bingooyong/oh-my-blueprint/internal/updater\t8.637s\nok  \tgithub.com/bingooyong/oh-my-blueprint/schemas\t5.896s\n",
+  "stderr": "",
+  "status": "PASS"
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "docker",
+    "--context",
+    "colima",
+    "image",
+    "inspect",
+    "sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a",
+    "--format",
+    "{{.Id}} {{.Os}}/{{.Architecture}} {{json .Config.Volumes}} {{json .RepoDigests}}"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T06:34:23.373641+00:00",
+  "expected_exit_code": 0,
+  "status": "PASS",
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a linux/arm64 null [\"alpine@sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a\"]\n",
+  "duration_seconds": 0.076
+}

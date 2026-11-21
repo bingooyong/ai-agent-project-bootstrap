@@ -17,7 +17,8 @@ import (
 var simpleName = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_.:-]{0,100}$`)
 var makeTarget = regexp.MustCompile(`^([A-Za-z0-9_][A-Za-z0-9_. -]*):([^=]|$)`)
 var moduleName = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._~/-]*$`)
-var goVersion = regexp.MustCompile(`^[0-9]+\.[0-9]+(\.[0-9]+)?$`)
+var goVersion = regexp.MustCompile(`^([1-9][0-9]*)\.(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*))?([a-z]+[0-9]+)?$`)
+var goToolchain = regexp.MustCompile(`^default$|^go1($|\.)`)
 
 func (s *scan) detect() error {
 	names := make([]string, 0, len(s.files))
@@ -104,7 +105,7 @@ func (s *scan) goMod(name string) error {
 		return errors.New("invalid Go module")
 	}
 	lines := bufio.NewScanner(bytes.NewReader(data))
-	hasModule, requireBlock, otherBlock := false, false, false
+	hasModule, hasGoVersion, hasToolchain, requireBlock, otherBlock := false, false, false, false, false
 	lineNo := 0
 	for lines.Scan() {
 		lineNo++
@@ -115,15 +116,22 @@ func (s *scan) goMod(name string) error {
 		}
 		switch fields[0] {
 		case "module":
-			if hasModule || len(fields) != 2 || !moduleName.MatchString(fields[1]) {
+			if requireBlock || otherBlock || hasModule || len(fields) != 2 || !moduleName.MatchString(fields[1]) {
 				return errors.New("invalid module directive")
 			}
 			hasModule = true
 		case "go":
-			if len(fields) != 2 || !goVersion.MatchString(fields[1]) {
+			if requireBlock || otherBlock || hasGoVersion || len(fields) != 2 || !goVersion.MatchString(fields[1]) {
 				return errors.New("invalid go directive")
 			}
+			hasGoVersion = true
 			s.fact("runtime", "go", fields[1], name, fmt.Sprintf("line:%d", lineNo))
+		case "toolchain":
+			if requireBlock || otherBlock || hasToolchain || len(fields) != 2 || !goToolchain.MatchString(fields[1]) {
+				return errors.New("invalid toolchain directive")
+			}
+			hasToolchain = true
+			s.profile.UnknownItems = append(s.profile.UnknownItems, name+": toolchain version is declared but not validated against installed runtime")
 		case "require":
 			if len(fields) == 2 && fields[1] == "(" {
 				requireBlock = true
@@ -138,7 +146,7 @@ func (s *scan) goMod(name string) error {
 			}
 			requireBlock = false
 			otherBlock = false
-		case "toolchain", "godebug", "replace", "exclude", "retract", "tool", "ignore":
+		case "godebug", "replace", "exclude", "retract", "tool", "ignore":
 			if len(fields) < 2 || requireBlock || otherBlock {
 				return errors.New("invalid module directive")
 			}

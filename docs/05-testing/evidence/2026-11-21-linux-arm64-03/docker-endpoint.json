@@ -1,0 +1,18 @@
+{
+  "command": [
+    "docker",
+    "context",
+    "inspect",
+    "colima",
+    "--format",
+    "{{.Endpoints.docker.Host}}"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T06:34:23.253153+00:00",
+  "expected_exit_code": 0,
+  "status": "PASS",
+  "exit_code": 0,
+  "stderr": "",
+  "stdout": "unix:///Users/bingooyong/.colima/default/docker.sock\n",
+  "duration_seconds": 0.028
+}

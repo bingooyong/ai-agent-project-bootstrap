@@ -1,0 +1,162 @@
+{
+  "command": [
+    "docker",
+    "--context",
+    "colima",
+    "run",
+    "--rm",
+    "--pull=never",
+    "--platform=linux/arm64",
+    "--network=none",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--user=65534:65534",
+    "--no-healthcheck",
+    "--workdir=/tmp",
+    "--tmpfs=/tmp:rw,nosuid,nodev,noexec,size=32m,mode=1777",
+    "--mount",
+    "type=bind,src=/Users/bingooyong/Code/01Code/github.com/bingooyong/ombp-linux-su8vkt5j,dst=/artifacts,readonly",
+    "--entrypoint=/bin/sh",
+    "sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a",
+    "/artifacts/flow.sh"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:41:40.770237+00:00",
+  "expected_exit_code": 0,
+  "status": "PASS",
+  "exit_code": 0,
+  "stderr": "inspection reported issues\ninspection reported issues\ninspection reported issues\nreport file already exists or could not be safely created\nreport output crosses a link or an invalid parent\n",
+  "observed": {
+    "runtime": "Linux aarch64",
+    "cases": {
+      "scan": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": [],
+        "coverage": "complete"
+      },
+      "scan-duplicate-go": {
+        "expected_exit_code": 3,
+        "actual_exit_code": 3,
+        "command_execution": "NOT_RUN",
+        "result": "error",
+        "finding_codes": [
+          "SCAN_INCOMPLETE"
+        ]
+      },
+      "dry-run": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": [],
+        "changed_paths": [
+          ".ombp/profile.json",
+          ".ombp/project.yaml",
+          "AGENTS.md",
+          ".ombp/lock.yaml"
+        ]
+      },
+      "save-plan": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": [],
+        "changed_paths": [
+          ".ombp/profile.json",
+          ".ombp/project.yaml",
+          "AGENTS.md",
+          ".ombp/lock.yaml"
+        ]
+      },
+      "apply": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": [],
+        "changed_files": 4
+      },
+      "doctor": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": [],
+        "cli_platform": "linux/arm64"
+      },
+      "doctor-orphan-lock": {
+        "expected_exit_code": 4,
+        "actual_exit_code": 4,
+        "command_execution": "NOT_RUN",
+        "result": "blocked",
+        "finding_codes": [
+          "WRITE_MUTEX_PRESENT"
+        ]
+      },
+      "preview-orphan-lock": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": []
+      },
+      "recover-orphan-lock": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": []
+      },
+      "doctor-state-unverified": {
+        "expected_exit_code": 3,
+        "actual_exit_code": 3,
+        "command_execution": "NOT_RUN",
+        "result": "error",
+        "finding_codes": [
+          "TRANSACTION_STATE_UNVERIFIED"
+        ]
+      },
+      "check-and-save-report": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": [],
+        "coverage": "complete"
+      },
+      "refuse-report-overwrite": {
+        "expected_exit_code": 3,
+        "actual_exit_code": 3,
+        "command_execution": "NOT_RUN",
+        "result": "error",
+        "finding_codes": [
+          "REPORT_WRITE_FAILED"
+        ]
+      },
+      "idempotent": {
+        "expected_exit_code": 0,
+        "actual_exit_code": 0,
+        "command_execution": "NOT_RUN",
+        "result": "clean",
+        "finding_codes": [],
+        "changed_paths": []
+      },
+      "reject-linked-parent": {
+        "expected_exit_code": 4,
+        "actual_exit_code": 4,
+        "command_execution": "NOT_RUN",
+        "result": "blocked",
+        "finding_codes": [
+          "PROJECT_SOURCE_DRIFT",
+          "REPORT_WRITE_FAILED"
+        ]
+      }
+    }
+  },
+  "duration_seconds": 0.726
+}

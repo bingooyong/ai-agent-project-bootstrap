@@ -1,0 +1,15 @@
+{
+  "name": "module-verify",
+  "command": [
+    "go",
+    "mod",
+    "verify"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T06:32:07.602640+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "all modules verified\n",
+  "stderr": "",
+  "status": "PASS"
+}

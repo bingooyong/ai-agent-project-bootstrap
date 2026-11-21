@@ -38,5 +38,7 @@
   "parent": null,
   "relatedFiles": [],
   "notes": "",
-  "meta": {}
+  "meta": {
+    "delivery_status": "PARTIAL"
+  }
 }

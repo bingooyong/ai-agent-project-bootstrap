@@ -1,0 +1,19 @@
+{
+  "name": "rules-override-check",
+  "command": [
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-aayge6q7/ombp",
+    "check",
+    "/var/folders/sh/9mz02c2x52gcpgcyy3rrt6440000gn/T/ombp-e2e-aayge6q7/project",
+    "--config",
+    "engineering.yaml",
+    "--format",
+    "json"
+  ],
+  "cwd": "/Users/bingooyong/Code/01Code/github.com/bingooyong/ai-agent-project-bootstrap",
+  "started_at": "2026-11-21T07:18:23.004687+00:00",
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "{\n  \"schema_version\": \"1.0\",\n  \"command\": \"ombp check\",\n  \"mode\": \"static\",\n  \"operation_status\": \"complete\",\n  \"result\": \"clean\",\n  \"exit_code\": 0,\n  \"tool_version\": \"0.1.0-dev\",\n  \"command_execution\": \"NOT_RUN\",\n  \"coverage\": {\n    \"status\": \"complete\",\n    \"files_visited\": 4,\n    \"bytes_read\": 39,\n    \"excluded\": []\n  },\n  \"data\": {\n    \"findings\": [],\n    \"exit_code\": 0,\n    \"coverage\": {\n      \"status\": \"complete\",\n      \"files_visited\": 4,\n      \"bytes_read\": 39,\n      \"excluded\": []\n    }\n  },\n  \"findings\": []\n}\n",
+  "stderr": "",
+  "status": "PASS"
+}

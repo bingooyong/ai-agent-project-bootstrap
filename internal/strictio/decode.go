@@ -17,7 +17,8 @@ import (
 const maxDepth = 48
 const maxNodes = 100000
 
-// Decode accepts one YAML or JSON document with exact, known typed fields.
+// Decode accepts one YAML or JSON document with exact, known typed fields and
+// rejects missing fields unless the type marks them optional.
 func Decode(data []byte, out any) error {
 	if len(data) > 4<<20 || !utf8.Valid(data) {
 		return errors.New("document exceeds size limit or is not UTF-8")
@@ -85,28 +86,53 @@ func checkType(n *yaml.Node, t reflect.Type) error {
 		if n.Kind != yaml.MappingNode {
 			return bad
 		}
-		fields := map[string]reflect.Type{}
+		type fieldSpec struct {
+			typ      reflect.Type
+			required bool
+		}
+		fields := map[string]fieldSpec{}
 		for i := 0; i < t.NumField(); i++ {
 			f := t.Field(i)
 			if !f.IsExported() {
 				continue
 			}
-			name := strings.Split(f.Tag.Get("yaml"), ",")[0]
+			yamlTag := strings.Split(f.Tag.Get("yaml"), ",")
+			name := yamlTag[0]
 			if name == "-" {
 				continue
 			}
 			if name == "" {
 				name = strings.ToLower(f.Name)
 			}
-			fields[name] = f.Type
+			jsonTag := strings.Split(f.Tag.Get("json"), ",")
+			if len(jsonTag) > 0 && jsonTag[0] == "-" {
+				continue
+			}
+			optional := f.Tag.Get("schema") == "optional"
+			for _, options := range [][]string{yamlTag[1:], jsonTag[1:]} {
+				for _, option := range options {
+					if option == "omitempty" {
+						optional = true
+					}
+				}
+			}
+			fields[name] = fieldSpec{typ: f.Type, required: !optional}
 		}
+		present := make(map[string]bool, len(n.Content)/2)
 		for i := 0; i < len(n.Content); i += 2 {
-			field, ok := fields[n.Content[i].Value]
+			name := n.Content[i].Value
+			field, ok := fields[name]
 			if !ok {
 				return errors.New("unknown document field")
 			}
-			if err := checkType(n.Content[i+1], field); err != nil {
+			if err := checkType(n.Content[i+1], field.typ); err != nil {
 				return err
+			}
+			present[name] = true
+		}
+		for name, field := range fields {
+			if field.required && !present[name] {
+				return errors.New("required document field is missing")
 			}
 		}
 	case reflect.Map:

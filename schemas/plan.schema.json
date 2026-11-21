@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Generated from Go types. This schema describes shape only; OMBP also enforces business, source, ownership and safety invariants.",
+  "properties": {
+    "changes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "after_sha256": {
+            "type": "string"
+          },
+          "before_sha256": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "diff": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "before_sha256",
+          "after_sha256",
+          "content",
+          "diff"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "config_path": {
+      "type": "string"
+    },
+    "fingerprint": {
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "root": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "type": "string"
+    },
+    "tool_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "tool_version",
+    "root",
+    "inputs",
+    "changes",
+    "fingerprint"
+  ],
+  "title": "OMBP plan data shape",
+  "type": "object"
+}

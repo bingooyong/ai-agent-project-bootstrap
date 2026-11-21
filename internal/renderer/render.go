@@ -22,6 +22,9 @@ import (
 const TemplateVersion = "1.0.0"
 const AdapterVersion = adapters.CodexVersion
 
+// TemplateFingerprint hashes the deterministic parsed template representation.
+func TemplateFingerprint() string { return safeio.Digest([]byte(document.Tree.Root.String())) }
+
 type File struct {
 	Path    string `json:"path"`
 	Content string `json:"content"`

@@ -9,6 +9,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 
@@ -19,6 +20,70 @@ type Root struct {
 	file   *os.File
 	meta   *os.Root
 	device uint64
+}
+
+// OpenExternalParent preserves policy for a caller-selected output/plan path.
+// Unlike a selected project root, user-created ancestor links are not resolved.
+// Darwin's fixed OS aliases are normalized explicitly so /var and /tmp work.
+func OpenExternalParent(name string) (*Root, string, error) {
+	abs, err := filepath.Abs(name)
+	if err != nil {
+		return nil, "", err
+	}
+	if Sensitive(filepath.ToSlash(abs)) {
+		return nil, "", errors.New("sensitive external path refused")
+	}
+	if runtime.GOOS == "darwin" {
+		for alias, target := range map[string]string{"/var": "/private/var", "/tmp": "/private/tmp", "/etc": "/private/etc"} {
+			if abs == alias || strings.HasPrefix(abs, alias+"/") {
+				resolved, e := filepath.EvalSymlinks(alias)
+				if e != nil || resolved != target {
+					return nil, "", errors.New("unexpected system path alias")
+				}
+				abs = target + strings.TrimPrefix(abs, alias)
+				break
+			}
+		}
+	}
+	base := filepath.Base(abs)
+	if err := ValidatePath(base); err != nil {
+		return nil, "", err
+	}
+	fd, err := unix.Open("/", unix.O_RDONLY|unix.O_DIRECTORY|unix.O_CLOEXEC, 0)
+	if err != nil {
+		return nil, "", err
+	}
+	for _, part := range strings.Split(strings.TrimPrefix(filepath.Dir(abs), "/"), "/") {
+		if part == "" {
+			continue
+		}
+		next, e := unix.Openat(fd, part, unix.O_RDONLY|unix.O_DIRECTORY|unix.O_CLOEXEC|unix.O_NOFOLLOW, 0)
+		_ = unix.Close(fd)
+		if e != nil {
+			return nil, "", errors.New("external parent contains a link or inaccessible directory")
+		}
+		fd = next
+	}
+	f := os.NewFile(uintptr(fd), "external-parent")
+	meta, e := os.OpenRoot(filepath.Dir(abs))
+	if e != nil {
+		_ = f.Close()
+		return nil, "", e
+	}
+	a, e := f.Stat()
+	b, e2 := meta.Stat(".")
+	if e != nil || e2 != nil || !os.SameFile(a, b) {
+		_ = f.Close()
+		_ = meta.Close()
+		return nil, "", errors.New("external parent changed while opening")
+	}
+	var st unix.Stat_t
+	if e := unix.Fstat(fd, &st); e != nil {
+		_ = f.Close()
+		_ = meta.Close()
+		return nil, "", e
+	}
+	return &Root{file: f, meta: meta, device: uint64(st.Dev)}, base, nil
 }
 
 func Open(name string) (*Root, error) {

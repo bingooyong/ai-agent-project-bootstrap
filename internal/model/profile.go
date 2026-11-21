@@ -35,10 +35,11 @@ type Module struct {
 }
 
 type Coverage struct {
-	Status       string   `json:"status" yaml:"status"`
-	FilesVisited int      `json:"files_visited" yaml:"files_visited"`
-	BytesRead    int64    `json:"bytes_read" yaml:"bytes_read"`
-	Excluded     []string `json:"excluded" yaml:"excluded"`
+	Status          string   `json:"status" yaml:"status"`
+	FilesVisited    int      `json:"files_visited" yaml:"files_visited"`
+	BytesRead       int64    `json:"bytes_read" yaml:"bytes_read"`
+	Excluded        []string `json:"excluded" yaml:"excluded"`
+	CountersOmitted bool     `json:"counters_omitted,omitempty" yaml:"counters_omitted,omitempty"`
 }
 
 type Profile struct {

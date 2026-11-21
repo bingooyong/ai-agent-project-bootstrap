@@ -1,0 +1,74 @@
+{
+  "status": "PASS",
+  "scope": "WP-02 supported go.mod version and toolchain directive syntax",
+  "platform": "macOS 26.6.2 arm64 (Darwin 25.6.0)",
+  "go_version": "go1.27.3 darwin/arm64",
+  "source_stable": true,
+  "source_sha256_before": {
+    "internal/scanner/detect.go": "c888ad46c2d8355e4deed3a460722d9a0b0bc8849144689e000f38432173c17f",
+    "internal/scanner/scanner_test.go": "d7254991124eed9c3b354ce4dc2559daa501191448d3a2b47d68a1bc8a5282b3"
+  },
+  "source_sha256_after": {
+    "internal/scanner/detect.go": "c888ad46c2d8355e4deed3a460722d9a0b0bc8849144689e000f38432173c17f",
+    "internal/scanner/scanner_test.go": "d7254991124eed9c3b354ce4dc2559daa501191448d3a2b47d68a1bc8a5282b3"
+  },
+  "attempts": [
+    {
+      "name": "regression reproduction before fix",
+      "command": "go test ./internal/scanner -run 'TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload|TestScanAcceptsGoVersionAndToolchainForms' -count=1",
+      "exit_code": 1,
+      "result": "EXPECTED_FAILURE",
+      "observation": "Invalid go 01.25 and toolchain unsupported declarations were reported complete; valid go 1.26rc1 was rejected."
+    }
+  ],
+  "checks": [
+    {
+      "name": "focused scanner regressions",
+      "command": "go test ./internal/scanner -run 'TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload|TestScanAcceptsGoVersionAndToolchainForms|TestScanMVPFixtureMatrix' -count=1",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "race tests",
+      "command": "go test -race -count=1 ./...",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "vet",
+      "command": "go vet ./...",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "format",
+      "command": "gofmt -l cmd internal",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "build",
+      "command": "go build -o /tmp/ombp-continuation-verification ./cmd/ombp",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "whitespace",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ],
+  "behavior": {
+    "go_version_syntax": "Matches Go 1.27.3 module parser accepted forms, including prerelease suffixes and rejection of leading-zero components.",
+    "toolchain_syntax": "Accepts default or names beginning go1 followed by end-of-name or a dot, matching Go 1.27.3 module parser forward-compatible syntax.",
+    "block_context": "Rejects module, go, and toolchain top-level directives inside require or other directive blocks.",
+    "runtime_compatibility": "Not checked; declared toolchain is retained as an unknown review item."
+  },
+  "remaining": [
+    "Go and TOML remain static parser subsets; broader directive and real-project coverage is open.",
+    "This evidence is unit/full-tree verification, not CLI acceptance of each new syntax case or real-project precision validation.",
+    "Windows strict I/O and native platform acceptance remain open.",
+    "The complete WP-00 through WP-14 goal remains PARTIAL."
+  ]
+}
