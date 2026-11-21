@@ -1,0 +1,213 @@
+{
+  "goal": "use trellis 规划 实现 ombp",
+  "master": ".trellis/tasks/11-20-ombp-master",
+  "nodes": [
+    {
+      "id": "WP-00",
+      "title": "官方依据、依赖与品牌核实",
+      "depends_on": [],
+      "task_path": ".trellis/tasks/11-20-ombp-wp00",
+      "status": "PLANNED",
+      "deliverables": [
+        "docs/implementation/DEPENDENCIES.md",
+        "docs/implementation/ADAPTER-EVIDENCE.md"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-01",
+      "title": "CLI骨架、严格数据模型与报告",
+      "depends_on": [
+        "WP-00"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp01",
+      "status": "PLANNED",
+      "deliverables": [
+        "cmd/ombp",
+        "internal/model",
+        "internal/strictio",
+        "internal/cli"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-02",
+      "title": "有界项目扫描与证据画像",
+      "depends_on": [
+        "WP-01"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp02",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/scanner"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-03",
+      "title": "规则基线、加载、解析与冲突",
+      "depends_on": [
+        "WP-01"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp03",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/rules",
+        "rulesets"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-04",
+      "title": "Codex层级规则与稳定渲染",
+      "depends_on": [
+        "WP-02",
+        "WP-03"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp04",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/renderer",
+        "internal/adapters"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-05",
+      "title": "计划、归属、事务与版本锁",
+      "depends_on": [
+        "WP-04"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp05",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/updater",
+        "internal/config"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-06",
+      "title": "静态治理检查与CI协议",
+      "depends_on": [
+        "WP-05"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp06",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/governance"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-07",
+      "title": "跨平台、E2E、用户指南与MVP验收",
+      "depends_on": [
+        "WP-06"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp07",
+      "status": "PLANNED",
+      "deliverables": [
+        "tests",
+        "docs/implementation/ACCEPTANCE.md"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-08",
+      "title": "漂移审计、更新与恢复工具",
+      "depends_on": [
+        "WP-07"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp08",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/governance",
+        "internal/updater"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-09",
+      "title": "多Agent适配与同步",
+      "depends_on": [
+        "WP-08"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp09",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/adapters"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-10",
+      "title": "Skills本地来源、安全审查与安装",
+      "depends_on": [
+        "WP-07"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp10",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/skills"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-11",
+      "title": "外部Registry、锁定与撤销",
+      "depends_on": [
+        "WP-10"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp11",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/registry"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-12",
+      "title": "可选AI分析与隐私边界",
+      "depends_on": [
+        "WP-08"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp12",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/analyzer"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-13",
+      "title": "企业规则、例外与私有治理",
+      "depends_on": [
+        "WP-11"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp13",
+      "status": "PLANNED",
+      "deliverables": [
+        "internal/policy"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "WP-14",
+      "title": "CI、分发及团队验收",
+      "depends_on": [
+        "WP-09",
+        "WP-11",
+        "WP-12",
+        "WP-13"
+      ],
+      "task_path": ".trellis/tasks/11-20-ombp-wp14",
+      "status": "PLANNED",
+      "deliverables": [
+        ".github",
+        "docs/implementation/RELEASE.md"
+      ],
+      "evidence": []
+    }
+  ]
+}
