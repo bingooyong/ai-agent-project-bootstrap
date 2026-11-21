@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 8
+- **Total Sessions**: 9
 - **Last Active**: 2026-11-21
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~95 | Active |
+| `journal-1.md` | ~106 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 9 | 2026-11-21 | Go require version validation | - | `feat/ombp-offline-core` |
 | 8 | 2026-11-21 | Go module directive syntax | - | `feat/ombp-offline-core` |
 | 7 | 2026-11-21 | Strict stored-profile validation | - | `feat/ombp-offline-core` |
 | 6 | 2026-11-21 | Go module scan completeness | - | `feat/ombp-offline-core` |

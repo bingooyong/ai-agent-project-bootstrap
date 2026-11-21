@@ -93,3 +93,13 @@ WP-02 and the WP-00–WP-14 master goal remain PARTIAL. The broader Go/TOML stat
 **Branch**: `feat/ombp-offline-core`
 
 Extended `doctor` to report a pending transaction journal and writer mutex separately; uninspectable state returns incomplete. Added isolated orphan-lock inspection and recovery regression. Full validation recorded 51 passing scenarios, both Go race suites, fresh report-schema checks, and the Linux arm64 runtime/test suite. MVP remains PARTIAL; Windows strict I/O and native runtime remain open. No commit or push.
+
+## Session 9: Go require version validation
+
+**Date**: 2026-11-21
+**Source session**: `01a1f88c-ff5d-7361-8a58-ecbf725b1de1`
+**Branch**: `feat/ombp-offline-core`
+
+WP-02 now validates dependency version tokens in inline and block `require` directives. Regression cases cover malformed latest/leading-zero/short-suffix values plus abbreviated, prerelease, pseudo, build-metadata and incompatible versions. Go 1.27.3 `go mod edit -json` parity accepted the seven valid examples and rejected the five invalid examples offline. Full-tree race, vet, formatting, build and diff checks pass; evidence: `docs/05-testing/evidence/2026-11-21-gomod-require-version-01/results.json`.
+
+WP-02 and the WP-00–WP-14 goal remain PARTIAL. Module path syntax and path-major compatibility, broader Go/TOML coverage, real-project identification precision, Windows strict I/O and native platform acceptance remain open. Changes will be committed and pushed under the existing user request.

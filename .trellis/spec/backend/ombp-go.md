@@ -19,3 +19,4 @@ Use manual construction, narrow package boundaries and standard testing. Fixed d
 - Report output is a separate create-only action. Preserve findings when report persistence fails, and do not copy full preview or recovery payloads into a saved report. Check local instruction links with bounded, no-follow metadata only.
 - Bind parsed custom rules and overrides to raw source digests from the same read. Record exact replacement lineage without free-form notes in lock and persisted report data. A local override is not enterprise policy authority or permission to change a locked version.
 - Strict YAML/JSON typed decoding rejects missing required fields recursively. `omitempty` and `schema:"optional"` mark optional fields; explicit null values remain invalid.
+- The Go scanner validates dependency version tokens in both inline and block `require` directives. This is token syntax only; module-path major compatibility remains outside the parser subset.

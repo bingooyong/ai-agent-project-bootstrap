@@ -15,7 +15,7 @@
 
 ## 本轮证据
 
-[当前集成结果](../05-testing/evidence/2026-11-21-go-mod-validation-01/results.json)记录 53 个检查与命令场景，全部通过，验证期间源码摘要稳定。本轮还覆盖重复 `go.mod` 版本声明：扫描返回退出码 3，并明确报告 incomplete。`doctor` 会阻断孤立写锁，对事务目录无法检查时也返回 incomplete。Go 1.27.3 与 1.25.5 全树 race 通过。[严格必需字段回归](../05-testing/evidence/2026-11-21-strict-required-fields-01/results.json)补充验证递归缺项拒绝、可选字段接受及已存画像完整覆盖要求。[Go 模块语法回归](../05-testing/evidence/2026-11-21-gomod-directive-syntax-01/results.json)覆盖有效预发布版本/工具链语法、非法版本和工具链语法以及块内顶层声明。较早的 [WP-06 记录](../05-testing/evidence/2026-11-21-wp06-integration-01/results.json)和 [规则/恢复记录](../05-testing/evidence/2026-11-21-provenance-recovery-02/results.json)保留历史状态。
+[当前集成结果](../05-testing/evidence/2026-11-21-go-mod-validation-01/results.json)记录 53 个检查与命令场景，全部通过，验证期间源码摘要稳定。本轮还覆盖重复 `go.mod` 版本声明：扫描返回退出码 3，并明确报告 incomplete。`doctor` 会阻断孤立写锁，对事务目录无法检查时也返回 incomplete。Go 1.27.3 与 1.25.5 全树 race 通过。[严格必需字段回归](../05-testing/evidence/2026-11-21-strict-required-fields-01/results.json)补充验证递归缺项拒绝、可选字段接受及已存画像完整覆盖要求。[Go 模块语法回归](../05-testing/evidence/2026-11-21-gomod-directive-syntax-01/results.json)覆盖有效预发布版本/工具链语法、非法版本和工具链语法以及块内顶层声明。[Go require 版本回归](../05-testing/evidence/2026-11-21-gomod-require-version-01/results.json)覆盖 inline/block 依赖版本语法和不完整 semver token。较早的 [WP-06 记录](../05-testing/evidence/2026-11-21-wp06-integration-01/results.json)和 [规则/恢复记录](../05-testing/evidence/2026-11-21-provenance-recovery-02/results.json)保留历史状态。
 
 | 平台 | 实际验证 | 当前边界 |
 | --- | --- | --- |

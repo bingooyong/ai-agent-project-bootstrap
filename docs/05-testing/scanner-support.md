@@ -11,7 +11,7 @@
 | 空目录 | 画像覆盖为 `complete`，技术栈为未知，模块和命令为空。 | 无候选命令。 |
 | 未知工程 | `backend`、`frontend`、JSX 片段和通用 SQL 均未触发技术栈或 Oracle 判断。 | 无候选命令。 |
 
-Go 和 TOML 解析支持声明子集。重复 Go `go`/`toolchain` 单例指令、非法版本/工具链语法、嵌套顶层版本声明、缺少模块声明和损坏的依赖块会使扫描不完整；有效但未支持的扩展指令会保留 unknown。Go 版本语法遵循本地 Go 解析器的接受形式；工具链只做语法识别，不检查当前安装版本。Go CLI 会拒绝重复版本指令，OMBP 单元、macOS CLI 与 Linux arm64 CLI 都验证为 incomplete，详见[集成证据](evidence/2026-11-21-go-mod-validation-01/results.json)和 [Linux 原生证据](evidence/2026-11-21-go-mod-validation-linux-02/results.json)；最新子集边界回归见[Go 模块指令证据](evidence/2026-11-21-gomod-directive-syntax-01/results.json)。TypeScript JSONC、动态 Make 定义、间接 requirements 和未支持的工作区写法可能需要人工确认。Node 命令以脚本键为首条证据，其后记录参与选择的 `packageManager` 字段、锁文件或工作区匹配条目；隐式 npm 仅作为调用约定。数据库客户端和框架依赖仅证明清单声明。所有命令在画像中均标为 `NOT_RUN`。
+Go 和 TOML 解析支持声明子集。重复 Go `go`/`toolchain` 单例指令、非法版本/工具链或 `require` 版本语法、嵌套顶层版本声明、缺少模块声明和损坏的依赖块会使扫描不完整；有效但未支持的扩展指令会保留 unknown。Go 版本语法遵循本地 Go 解析器的接受形式；工具链只做语法识别，不检查当前安装版本。依赖版本 token 校验完整或缩写的 semver 主版本形式、预发布和构建元数据，暂不校验模块路径与 `/vN` 主版本的兼容性。Go CLI 会拒绝重复版本指令，OMBP 单元、macOS CLI 与 Linux arm64 CLI 都验证为 incomplete，详见[集成证据](evidence/2026-11-21-go-mod-validation-01/results.json)和 [Linux 原生证据](evidence/2026-11-21-go-mod-validation-linux-02/results.json)；指令与依赖版本边界回归见[Go require 版本证据](evidence/2026-11-21-gomod-require-version-01/results.json)。TypeScript JSONC、动态 Make 定义、间接 requirements 和未支持的工作区写法可能需要人工确认。Node 命令以脚本键为首条证据，其后记录参与选择的 `packageManager` 字段、锁文件或工作区匹配条目；隐式 npm 仅作为调用约定。数据库客户端和框架依赖仅证明清单声明。所有命令在画像中均标为 `NOT_RUN`。
 
 本地使用 Go 1.27.3 在 macOS 26.6.2 arm64 上执行 scanner 全包 race 测试。矩阵通过 6/6，包语句覆盖率为 81.9%，退出码为 0，运行期间源码摘要一致。覆盖率统计针对代码语句，真实工程识别精度尚未测量。[原始命令、输入摘要与输出](evidence/2026-11-21-scanner-matrix-01/scanner-race-coverage.json)
 

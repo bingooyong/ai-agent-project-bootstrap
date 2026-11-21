@@ -53,9 +53,10 @@
         "docs/05-testing/evidence/2026-11-21-go-mod-validation-linux-02/results.json",
         "docs/05-testing/evidence/2026-11-21-scanner-matrix-01/scanner-race-coverage.json",
         "docs/05-testing/evidence/2026-11-21-scanner-budget-02/results.json",
-        "docs/05-testing/evidence/2026-11-21-gomod-directive-syntax-01/results.json"
+        "docs/05-testing/evidence/2026-11-21-gomod-directive-syntax-01/results.json",
+        "docs/05-testing/evidence/2026-11-21-gomod-require-version-01/results.json"
       ],
-      "delivery_note": "六组合成夹具与资源边界有实测；Node 包管理器选择和 Go 指令语法有回归，重复或非法 Go 版本/工具链声明拒绝并标 incomplete。Go/TOML 仍是静态解析子集，真实工程精度未验。"
+      "delivery_note": "六组合成夹具与资源边界有实测；Node 选择和 Go 版本/工具链/require 版本语法有回归，非法 token 拒绝并标 incomplete。路径主版本兼容性未校验；Go/TOML 仍是静态解析子集，真实工程精度未验。"
     },
     {
       "id": "WP-03",

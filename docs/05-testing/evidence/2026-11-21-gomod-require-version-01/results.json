@@ -1,0 +1,98 @@
+{
+  "status": "PASS",
+  "scope": "WP-02 Go require dependency-version token syntax in inline and block forms",
+  "platform": "macOS 26.6.2 arm64 (Darwin 25.6.0)",
+  "go_version": "go1.27.3 darwin/arm64",
+  "source_stable": true,
+  "source_sha256_before": {
+    "internal/scanner/detect.go": "399b16c27b122b89ada5f031bfd97d6caa2f422657c3988da753276400fbdfb0",
+    "internal/scanner/scanner_test.go": "5a6b811f6e0667cbd484c139c2b9305bf95a76e020b24ea44a25497864f24bc0"
+  },
+  "source_sha256_after": {
+    "internal/scanner/detect.go": "399b16c27b122b89ada5f031bfd97d6caa2f422657c3988da753276400fbdfb0",
+    "internal/scanner/scanner_test.go": "5a6b811f6e0667cbd484c139c2b9305bf95a76e020b24ea44a25497864f24bc0"
+  },
+  "attempts": [
+    {
+      "name": "regression reproduction before fix",
+      "command": "go test ./internal/scanner -run 'TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload|TestScanAcceptsGoModuleVersionForms' -count=1",
+      "exit_code": 1,
+      "result": "EXPECTED_FAILURE",
+      "observation": "Both inline require latest and block require v1.02.3 were reported as complete. Follow-up cases also exposed acceptance of shortened versions with forbidden suffixes."
+    }
+  ],
+  "checks": [
+    {
+      "name": "focused scanner regressions",
+      "command": "go test ./internal/scanner -run 'TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload|TestScanAcceptsGoModuleVersionForms|TestScanAcceptsGoVersionAndToolchainForms|TestScanMVPFixtureMatrix' -count=1",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "Go parser parity",
+      "command": "go mod edit -json against 12 isolated temporary go.mod require fixtures with GOTOOLCHAIN=local, GOPROXY=off, GOSUMDB=off",
+      "exit_code": 0,
+      "result": "PASS",
+      "observation": "The local Go parser accepted all seven valid forms and rejected all five invalid forms in the table below. No network or repository script was used."
+    },
+    {
+      "name": "race tests",
+      "command": "go test -race -count=1 ./...",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "vet",
+      "command": "go vet ./...",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "format",
+      "command": "gofmt -l cmd internal",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "build",
+      "command": "go build -o /tmp/ombp-require-version-verify ./cmd/ombp",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "name": "whitespace",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ],
+  "behavior": {
+    "checked_forms": [
+      "single-line require directive",
+      "require parenthesized block"
+    ],
+    "accepted_examples": [
+      "v1",
+      "v1.2",
+      "v1.2.3",
+      "v1.2.3-rc.1",
+      "v1.2.3-rc.1+build.7",
+      "v0.0.0-20260304120000-abcdefabcdef",
+      "v2.3.4+incompatible"
+    ],
+    "rejected_examples": [
+      "latest",
+      "v1.02.3",
+      "v1.2-rc.1",
+      "v1+meta",
+      "v1.2.3-rc.01"
+    ],
+    "coverage_result": "Invalid supported require version syntax makes scanning incomplete."
+  },
+  "remaining": [
+    "Module-path syntax and compatibility with a /vN path major are not validated.",
+    "Go and TOML remain static parser subsets; real-project precision is not measured.",
+    "Windows strict I/O and native platform acceptance remain open.",
+    "The complete WP-00 through WP-14 goal remains PARTIAL."
+  ]
+}

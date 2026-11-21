@@ -8,4 +8,6 @@
 
 2026-11-21 增补 Go 指令语法边界：[新回归证据](../../../docs/05-testing/evidence/2026-11-21-gomod-directive-syntax-01/results.json)。`go` 版本采用 Go 接受的形式；`toolchain` 限定 `default` 或 `go1` 前缀，仍不检查本机运行时兼容性。非法值和 require 块内的顶层 go 指令使扫描不完整。此证据为单元与全树测试，不是 CLI 或真实工程识别精度验收。
 
+2026-11-21 增补 require 依赖版本语法：[新回归证据](../../../docs/05-testing/evidence/2026-11-21-gomod-require-version-01/results.json)。单行和块式 require 都校验 semver token；识别缩写版本、预发布、伪版本及 `+incompatible`。不匹配的语法会返回 incomplete。模块路径与 `/vN` 的一致性仍不在本解析子集。
+
 完整目标仍按主任务和全部WP保留；没有标记完成或归档。

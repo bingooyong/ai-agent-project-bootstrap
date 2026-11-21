@@ -17,6 +17,18 @@ import (
 var simpleName = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_.:-]{0,100}$`)
 var makeTarget = regexp.MustCompile(`^([A-Za-z0-9_][A-Za-z0-9_. -]*):([^=]|$)`)
 var moduleName = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._~/-]*$`)
+
+const goVersionPart = `(?:0|[1-9][0-9]*)`
+const goPrereleaseIdentifier = `(?:` + goVersionPart + `|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)`
+const goBuildIdentifier = `[0-9A-Za-z-]+`
+
+var goModuleVersion = regexp.MustCompile(
+	`^v` + goVersionPart +
+		`(?:\.` + goVersionPart +
+		`(?:\.` + goVersionPart +
+		`(?:-` + goPrereleaseIdentifier + `(?:\.` + goPrereleaseIdentifier + `)*)?` +
+		`(?:\+` + goBuildIdentifier + `(?:\.` + goBuildIdentifier + `)*)?)?)?$`,
+)
 var goVersion = regexp.MustCompile(`^([1-9][0-9]*)\.(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*))?([a-z]+[0-9]+)?$`)
 var goToolchain = regexp.MustCompile(`^default$|^go1($|\.)`)
 
@@ -135,7 +147,7 @@ func (s *scan) goMod(name string) error {
 		case "require":
 			if len(fields) == 2 && fields[1] == "(" {
 				requireBlock = true
-			} else if len(fields) == 3 && moduleName.MatchString(fields[1]) {
+			} else if len(fields) == 3 && moduleName.MatchString(fields[1]) && goModuleVersion.MatchString(fields[2]) {
 				s.dependency(fields[1], name, fmt.Sprintf("line:%d", lineNo), "go")
 			} else {
 				return errors.New("invalid require directive")
@@ -158,7 +170,7 @@ func (s *scan) goMod(name string) error {
 			s.profile.UnknownItems = append(s.profile.UnknownItems, name+": additional Go module directives are not evaluated")
 		default:
 			if requireBlock {
-				if len(fields) != 2 || !moduleName.MatchString(fields[0]) {
+				if len(fields) != 2 || !moduleName.MatchString(fields[0]) || !goModuleVersion.MatchString(fields[1]) {
 					return errors.New("invalid module requirement")
 				}
 				s.dependency(fields[0], name, fmt.Sprintf("line:%d", lineNo), "go")

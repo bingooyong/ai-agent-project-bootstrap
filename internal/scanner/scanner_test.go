@@ -108,15 +108,19 @@ func TestScanMixedProjectHasEvidenceAndNeverExecutesScripts(t *testing.T) {
 
 func TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload(t *testing.T) {
 	for name, content := range map[string]string{
-		"package.json":            `{"scripts":{"test":"SECRET_REJECTED_PAYLOAD"},"scripts":{}}`,
-		"go.mod":                  "module\nrequire (\n",
-		"duplicate-go.mod":        "module example.test/fixture\ngo 1.25\ngo 1.26\n",
-		"duplicate-toolchain.mod": "module example.test/fixture\ngo 1.25\ntoolchain go1.25.1\ntoolchain go1.25.2\n",
-		"invalid-go-version.mod":  "module example.test/fixture\ngo 01.25\n",
-		"invalid-toolchain.mod":   "module example.test/fixture\ngo 1.25\ntoolchain unsupported\n",
-		"nested-go-directive.mod": "module example.test/fixture\nrequire (\ngo 1.26\n)\n",
-		"pyproject.toml":          "[project]\nname = 'ok'\nname = 'SECRET_REJECTED_PAYLOAD'\n",
-		"requirements.txt":        "bad requirement SECRET_REJECTED_PAYLOAD\n",
+		"package.json":                      `{"scripts":{"test":"SECRET_REJECTED_PAYLOAD"},"scripts":{}}`,
+		"go.mod":                            "module\nrequire (\n",
+		"duplicate-go.mod":                  "module example.test/fixture\ngo 1.25\ngo 1.26\n",
+		"duplicate-toolchain.mod":           "module example.test/fixture\ngo 1.25\ntoolchain go1.25.1\ntoolchain go1.25.2\n",
+		"invalid-go-version.mod":            "module example.test/fixture\ngo 01.25\n",
+		"invalid-toolchain.mod":             "module example.test/fixture\ngo 1.25\ntoolchain unsupported\n",
+		"invalid-require-version.mod":       "module example.test/fixture\ngo 1.25\nrequire example.test/library latest\n",
+		"invalid-require-block-version.mod": "module example.test/fixture\ngo 1.25\nrequire (\nexample.test/library v1.02.3\n)\n",
+		"invalid-short-prerelease.mod":      "module example.test/fixture\ngo 1.25\nrequire example.test/library v1.2-rc.1\n",
+		"invalid-short-build.mod":           "module example.test/fixture\ngo 1.25\nrequire example.test/library v1+meta\n",
+		"nested-go-directive.mod":           "module example.test/fixture\nrequire (\ngo 1.26\n)\n",
+		"pyproject.toml":                    "[project]\nname = 'ok'\nname = 'SECRET_REJECTED_PAYLOAD'\n",
+		"requirements.txt":                  "bad requirement SECRET_REJECTED_PAYLOAD\n",
 	} {
 		t.Run(name, func(t *testing.T) {
 			filename := name
@@ -132,6 +136,32 @@ func TestScanRejectsMalformedRelevantDeclarationsWithoutLeakingPayload(t *testin
 				t.Fatal("parser error leaked source payload")
 			}
 		})
+	}
+}
+
+func TestScanAcceptsGoModuleVersionForms(t *testing.T) {
+	for _, version := range []string{
+		"v1",
+		"v1.2",
+		"v1.2.3",
+		"v1.2.3-rc.1",
+		"v1.2.3-rc.1+build.7",
+		"v0.0.0-20260304120000-abcdefabcdef",
+		"v2.3.4+incompatible",
+	} {
+		for _, form := range []string{"inline", "block"} {
+			t.Run(version+"/"+form, func(t *testing.T) {
+				requirement := "require example.test/library " + version + "\n"
+				if form == "block" {
+					requirement = "require (\nexample.test/library " + version + "\n)\n"
+				}
+				dir := project(t, map[string]string{"go.mod": "module example.test/fixture\ngo 1.25\n" + requirement})
+				profile, err := Scan(t.Context(), dir, DefaultOptions())
+				if err != nil || profile.Coverage.Status != "complete" {
+					t.Fatalf("valid module version rejected: %v (%+v)", err, profile.Coverage)
+				}
+			})
+		}
 	}
 }
 
